@@ -1,0 +1,1066 @@
+<title>Selvara · Defensa final</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: escenario 16:9 de 1600×900 escalado a la ventana. Encabezado fino (marca + bloque), cuerpo y pie.
+   Aisle abre y cierra con su identidad (papel, noche y verdes, Poppins); Selvara ocupa el medio (arena y verde, Cormorant + Jost). */
+:root {
+  color-scheme: light;
+  --al-papel: #F4F6F1; --al-noche: #0F1B21; --al-card: #172830; --al-linea: #29404A; --al-osc: #397553; --al-claro: #93C165; --al-texto: #1C2D38; --al-muted: #9FB1B9;
+  --s-verde: #2F4A3C; --s-salvia: #4A5A3E; --s-nude: #D8A99A; --s-nude-osc: #A86F5E; --s-arena: #F2EBE3; --s-arena2: #E7DDD1; --s-carbon: #333333; --s-papel: #FBF8F4; --s-gris: #6B6460;
+  --ok: #3E8E5E;
+  --f-a: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --f-serif: "Cormorant Garamond", "Cormorant", Georgia, serif;
+  --f-sans: "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --fondo: #0B1317;
+}
+html, body { height: 100%; }
+body { background: var(--fondo); color: #fff; overflow: hidden; font-family: var(--f-sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; overflow: hidden; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.5); background: var(--al-papel); }
+.barrido { position: absolute; inset: 0; z-index: 30; pointer-events: none; transform: translateX(105%); }
+.barrido.go { animation: barrer .85s var(--ease) forwards; }
+@keyframes barrer { 0% { transform: translateX(105%) skewX(-12deg); } 45%, 55% { transform: translateX(0) skewX(-12deg); } 100% { transform: translateX(-115%) skewX(-12deg); } }
+
+.slide { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 42px 96px 34px; opacity: 0; visibility: hidden; transition: opacity .45s var(--ease), visibility 0s .45s; overflow: hidden; }
+.slide.on { opacity: 1; visibility: visible; transition: opacity .5s var(--ease) .1s, visibility 0s; }
+.cuerpo { display: flex; flex-direction: column; justify-content: center; gap: 36px; min-height: 0; min-width: 0; position: relative; z-index: 1; }
+.top, .pie { display: flex; align-items: center; justify-content: space-between; gap: 20px; position: relative; z-index: 1; }
+.top { padding-bottom: 16px; border-bottom: 1px solid; }
+.pie { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; opacity: .6; }
+.pie .pg { font-variant-numeric: tabular-nums; }
+.bloque { font-size: 13px; letter-spacing: .24em; text-transform: uppercase; font-weight: 500; }
+
+/* Aisle */
+.aisle { background: var(--al-papel); color: var(--al-texto); font-family: var(--f-a); }
+.aisle.noche { background: var(--al-noche); color: #fff; }
+.aisle.verde { background: var(--al-osc); color: #fff; }
+.aisle .top { border-color: rgba(28,45,56,.12); } .aisle.noche .top, .aisle.verde .top { border-color: rgba(255,255,255,.14); }
+.aisle .bloque, .aisle .pie { font-family: var(--f-mono); }
+.aisle .bloque { color: #5E6E76; } .aisle.noche .bloque { color: var(--al-muted); } .aisle.verde .bloque { color: #DCEBD3; }
+.alogo { display: block; height: auto; }
+.alogo path { transition: fill .3s; }
+.aisle.noche .alogo path[fill="var(--al-texto)"], .aisle.verde .alogo path[fill="var(--al-texto)"] { fill: #fff; }
+.aisle.verde .alogo path[fill="var(--al-osc)"] { fill: #fff; }
+.top .alogo { width: 118px; }
+.aiso { display: block; }
+.k { font-family: var(--f-mono); font-weight: 500; font-size: 15px; letter-spacing: .28em; text-transform: uppercase; color: var(--al-osc); }
+.aisle.noche .k { color: var(--al-claro); } .aisle.verde .k { color: #DCEBD3; }
+.aisle .t1 { font-weight: 700; font-size: 96px; line-height: 1; letter-spacing: -.035em; margin: 0; text-wrap: balance; }
+.aisle .t1 .v { color: var(--al-osc); } .aisle.noche .t1 .v { color: var(--al-claro); }
+.aisle .lead { font-size: 24px; line-height: 1.5; color: #4E5F68; margin: 0; max-width: 980px; }
+.aisle.noche .lead { color: var(--al-muted); } .aisle.verde .lead { color: #E3F0DA; }
+.equipo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.eq { background: var(--al-card); color: #fff; border-radius: 16px; padding: 26px 26px 28px; display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
+.eq .n { font-family: var(--f-mono); font-size: 13px; letter-spacing: .2em; color: var(--al-claro); }
+.eq b { font-size: 26px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.eq .rol { font-size: 17px; color: var(--al-muted); line-height: 1.35; }
+.eq .red { margin-top: auto; align-self: flex-start; font-family: var(--f-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--al-noche); background: var(--al-claro); padding: 6px 10px; border-radius: 999px; }
+.eq .marca { position: absolute; right: -20px; bottom: -26px; width: 120px; opacity: .14; }
+.eq .marca svg { width: 100%; height: auto; }
+.video-a { border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 30px 70px rgba(0,0,0,.45); align-self: center; width: 1180px; max-width: 100%; position: relative; }
+.video-a video { display: block; width: 100%; height: auto; }
+.video-a .play { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(15,27,33,.35); border: 0; cursor: pointer; color: #fff; font: 600 20px var(--f-a); transition: opacity .3s; }
+.video-a .play span { display: flex; align-items: center; gap: 12px; padding: 16px 26px; border-radius: 999px; background: var(--al-osc); }
+.video-a.corriendo .play { opacity: 0; pointer-events: none; }
+
+/* Selvara */
+.selv { background: var(--s-arena); color: var(--s-carbon); }
+.selv.deep { background: var(--s-verde); color: var(--s-arena); }
+.selv .top { border-color: rgba(47,74,60,.14); } .selv.deep .top { border-color: rgba(242,235,227,.16); }
+.selv .bloque, .selv .pie { color: var(--s-gris); } .selv.deep .bloque, .selv.deep .pie { color: rgba(242,235,227,.75); }
+.marca-s { display: flex; align-items: center; gap: 10px; font-family: var(--f-serif); font-size: 30px; font-weight: 500; line-height: 1; color: var(--s-verde); }
+.selv.deep .marca-s { color: var(--s-arena); }
+.iso path, .iso line, .iso circle { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.iso .h { stroke: currentColor; } .iso .t { stroke: var(--s-nude); }
+.marca-s .iso { width: 34px; height: 30px; } .marca-s .iso g { stroke-width: 18; }
+.logo-top { height: 66px; width: auto; display: block; }
+.selv.deep .logo-top .lt1 { fill: #F2EBE3; } .selv.deep .logo-top .lt2 { fill: #D8A99A; } .selv.deep .logo-top g { stroke: #B9CFA6; }
+.selv::after { content: ""; position: absolute; right: -90px; bottom: -120px; width: 620px; height: 540px; opacity: .06; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 350 290'%3E%3Cg fill='none' stroke='%232F4A3C' stroke-width='6' stroke-linecap='round'%3E%3Cpath d='M164.26 261C79.21 239.52-1.76 140.38 0 51 87.17 70.82 163.9 173.28 164.26 261Z'/%3E%3Cpath d='M164.26 261C164.62 173.28 241.34 70.82 328.51 51 330.27 140.38 249.31 239.52 164.26 261Z'/%3E%3Cpath d='M164.26 261C103.79 212.15 70.43 99.72 97.44 26 159.2 74.48 189.98 187.65 164.26 261Z'/%3E%3Cpath d='M164.26 261C138.54 187.65 169.32 74.48 231.07 26 258.09 99.72 224.72 212.15 164.26 261Z'/%3E%3Cpath d='M164.26 66V246'/%3E%3Ccircle cx='164.26' cy='26' r='23.5'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat; }
+.selv.deep::after { opacity: .07; filter: invert(1) brightness(1.6); }
+.selv.sinmarca::after { display: none; }
+.ey { font-weight: 600; font-size: 15px; letter-spacing: .26em; text-transform: uppercase; color: var(--s-nude-osc); }
+.selv.deep .ey { color: var(--s-nude); }
+.selv .h { font-family: var(--f-serif); font-weight: 500; font-size: 72px; line-height: 1.02; letter-spacing: -.01em; color: var(--s-verde); margin: 0; text-wrap: balance; }
+.selv .h.xl { font-size: 104px; line-height: .98; }
+.selv .h em { font-style: italic; color: var(--s-nude-osc); }
+.selv.deep .h { color: var(--s-arena); } .selv.deep .h em { color: var(--s-nude); }
+.selv .tx { font-size: 22px; line-height: 1.5; color: #4D4A47; margin: 0; }
+.selv.deep .tx { color: #D9E1D7; }
+.chico { font-size: 16px; color: var(--s-gris); line-height: 1.45; margin: 0; }
+.selv.deep .chico { color: rgba(242,235,227,.68); }
+.num { font-variant-numeric: tabular-nums; }
+.hstack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.split > * { min-width: 0; }
+.box { background: var(--s-papel); border-radius: 18px; padding: 26px 28px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.selv.deep .box { background: rgba(242,235,227,.07); border: 1px solid rgba(242,235,227,.14); }
+.box.oscura { background: var(--s-verde); color: var(--s-arena); }
+.box.oscura .tx, .box.oscura .chico { color: #D9E1D7; }
+.lab { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; color: var(--s-nude-osc); }
+.box.oscura .lab, .selv.deep .lab { color: var(--s-nude); }
+.bt { font-family: var(--f-serif); font-size: 38px; line-height: 1.05; color: var(--s-verde); font-weight: 500; }
+.box.oscura .bt, .selv.deep .bt { color: var(--s-arena); }
+.gig { font-family: var(--f-serif); font-weight: 500; line-height: .85; color: var(--s-verde); letter-spacing: -.02em; }
+.selv.deep .gig, .box.oscura .gig { color: var(--s-arena); }
+.pill { display: inline-flex; align-self: flex-start; align-items: center; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; padding: 8px 14px; border-radius: 999px; background: var(--s-arena2); color: var(--s-verde); }
+.pill.n { background: var(--s-nude); color: var(--s-verde); }
+.check { display: flex; flex-direction: column; gap: 12px; }
+.check > div { display: flex; gap: 14px; align-items: flex-start; font-size: 20px; line-height: 1.4; }
+.check > div::before { content: ""; flex: none; width: 22px; height: 22px; border-radius: 50%; margin-top: 3px; background: var(--s-verde) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 12.5l3.2 3.2L17 9' fill='none' stroke='%23F2EBE3' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat; }
+.selv.deep .check > div::before, .box.oscura .check > div::before { background-color: var(--s-nude); }
+
+/* animaciones */
+.a { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 85ms + 200ms); }
+.a.l { transform: translateX(-40px); } .a.r { transform: translateX(40px); } .a.s { transform: scale(.88); }
+.slide.on .a { opacity: 1; transform: none; }
+.blk { clip-path: inset(100% 0 0 0 round 18px); transition: clip-path .9s var(--ease); transition-delay: calc(var(--i, 0) * 110ms + 250ms); }
+.slide.on .blk { clip-path: inset(0 0 0 0 round 18px); }
+.w .wo { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .1em; margin-bottom: -.1em; }
+.w .wi { display: inline-block; transform: translateY(108%); transition: transform .8s var(--ease); transition-delay: calc(var(--j, 0) * 45ms + 150ms); }
+.slide.on .w .wi { transform: none; }
+
+/* antes / ahora */
+.aa { display: grid; grid-template-columns: .72fr 1.28fr; gap: 24px; min-height: 0; }
+.antes { background: #E4DED6; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.antes .lab { color: #6B6460; }
+.marca-antes { display: flex; align-items: center; gap: 16px; padding: 12px 0 14px; border-bottom: 1px dashed #B7AEA5; }
+.marca-antes .loto { width: 86px; height: 74px; color: #9A918A; flex: none; }
+.marca-antes .mt1 { display: block; font-family: Georgia, serif; font-size: 30px; color: #8E857E; letter-spacing: .02em; }
+.vacios { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+.vacio { border: 2px dashed #B7AEA5; border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; text-align: center; padding: 10px; color: #7D746D; }
+.vacio b { font-family: var(--f-serif); font-size: 52px; line-height: 1; color: #8E857E; font-weight: 500; }
+.vacio span { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+.despues { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.marca-hoy { display: flex; align-items: center; gap: 28px; background: var(--s-papel); border-radius: 16px; padding: 14px 22px; }
+.logo-hoy { height: 64px; width: auto; flex: none; }
+.paleta-hoy { display: flex; gap: 6px; }
+.paleta-hoy i { width: 30px; height: 30px; border-radius: 8px; border: 1px solid rgba(0,0,0,.06); }
+.fuentes-hoy { display: flex; align-items: baseline; gap: 14px; margin-left: auto; color: var(--s-carbon); }
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sh { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sh > div { aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 10px 26px rgba(47,74,60,.14); }
+.sh.ancha { grid-row: span 2; }
+.sh.ancha > div { aspect-ratio: auto; flex: 1; }
+.sh img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+.sh figcaption { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; color: var(--s-verde); }
+/* competencia */
+.comp { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 18px; }
+.estr { color: #E2B65A; letter-spacing: 3px; font-size: 22px; }
+.lect { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--s-arena2); font-size: 16px; color: var(--s-verde); font-weight: 500; }
+.cita { font-family: var(--f-serif); font-size: 84px; line-height: 1.03; font-weight: 500; color: var(--s-arena); letter-spacing: -.015em; text-wrap: balance; margin: 0; }
+.cita em { color: var(--s-nude); }
+
+/* objetivos */
+.barra { position: relative; height: 16px; background: rgba(242,235,227,.15); border-radius: 999px; overflow: hidden; }
+.barra i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--s-nude); border-radius: 999px; transition: width 1.4s var(--ease) .9s; }
+.slide.on .barra i { width: var(--w); }
+.escala { display: flex; justify-content: space-between; font-size: 15px; color: #D9E1D7; }
+.camino { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.camino .box { gap: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { font-size: 17px; padding: 9px 14px; border-radius: 10px; background: var(--s-arena); border: 1px solid var(--s-arena2); color: var(--s-carbon); }
+.box.oscura .chips span { background: rgba(242,235,227,.1); border-color: rgba(242,235,227,.16); color: var(--s-arena); }
+.mide { display: flex; align-items: center; gap: 22px; padding: 18px 24px; border-radius: 16px; border: 1.5px solid var(--s-verde); }
+.mide b { font-family: var(--f-serif); font-size: 34px; color: var(--s-verde); font-weight: 500; }
+
+/* redes */
+.red .rn { font-family: var(--f-serif); font-size: 46px; color: var(--s-verde); line-height: 1; }
+.red .dato { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--s-arena2); font-size: 17px; color: var(--s-verde); font-weight: 500; }
+.red .tx { font-size: 18px; }
+.metgrid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; grid-template-rows: auto auto; gap: 16px; }
+.met .rn { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; color: var(--s-nude); }
+.met .v { font-family: var(--f-serif); font-size: 96px; line-height: .9; color: var(--s-arena); letter-spacing: -.02em; }
+.met .u { font-size: 16px; color: #C9D3C8; }
+.met ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 17px; color: #E8E2D8; }
+.met li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--s-nude); margin-right: 10px; vertical-align: 2px; }
+.met.grande { grid-row: span 2; justify-content: flex-end; }
+.met.grande .v { font-size: 180px; }
+
+/* pauta */
+.meses { display: flex; align-items: flex-end; gap: 28px; height: 280px; border-bottom: 2px solid var(--s-arena2); padding-inline: 10px; }
+.mes-b { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; height: 100%; }
+.mes-b i { display: block; width: 100%; height: 0; border-radius: 12px 12px 0 0; background: var(--s-verde); transition: height 1.2s var(--ease); transition-delay: calc(var(--i, 0) * 120ms + 600ms); }
+.mes-b.prueba i { background: var(--s-nude); }
+.slide.on .mes-b i { height: var(--h); }
+.mes-b .val { font-family: var(--f-serif); font-size: 34px; color: var(--s-verde); font-weight: 500; }
+.mes-lab { display: flex; gap: 28px; padding: 12px 10px 0; }
+.mes-lab > span { flex: 1; text-align: center; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--s-gris); }
+.repart { display: flex; height: 54px; border-radius: 12px; overflow: hidden; }
+.repart > div { display: flex; align-items: center; padding-inline: 16px; font-size: 17px; font-weight: 600; color: var(--s-arena); }
+.porque { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.camp .c { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 10px 0; border-bottom: 1px solid var(--s-arena2); font-size: 18px; }
+.camp .c .pc { color: var(--s-verde); font-weight: 600; }
+.camp .c .por { grid-column: 1 / -1; font-size: 15px; color: var(--s-gris); }
+.antesdesp { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; }
+.antesdesp .de { font-family: var(--f-serif); font-size: 64px; color: rgba(242,235,227,.55); line-height: 1; }
+.antesdesp .fl { height: 2px; background: linear-gradient(90deg, rgba(242,235,227,.3), var(--s-nude)); transform-origin: left; transform: scaleX(0); transition: transform 1s var(--ease) .8s; }
+.slide.on .antesdesp .fl { transform: scaleX(1); }
+.antesdesp .a2 { font-family: var(--f-serif); font-size: 110px; color: var(--s-arena); line-height: .9; }
+.fu { display: grid; grid-template-columns: 200px 1fr 70px; gap: 14px; align-items: center; font-size: 18px; }
+.fu .b { height: 22px; border-radius: 8px; background: rgba(242,235,227,.12); overflow: hidden; }
+.fu .b i { display: block; height: 100%; width: 0; background: var(--s-nude); border-radius: 8px; transition: width 1.2s var(--ease); transition-delay: calc(var(--i, 0) * 100ms + 600ms); }
+.slide.on .fu .b i { width: var(--w); }
+.fu .n { text-align: right; color: var(--s-arena); }
+
+/* web */
+.laptop { padding: 12px 12px 0; background: #1B1D1C; border-radius: 18px 18px 6px 6px; box-shadow: 0 30px 60px rgba(47,74,60,.25); }
+.laptop video { display: block; width: 100%; border-radius: 6px; }
+.laptop-base { height: 16px; margin: 0 -36px; background: linear-gradient(#D6CFC7, #B9B0A6); border-radius: 0 0 14px 14px; }
+.anillos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.anillo { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.anillo svg { width: 200px; height: 200px; }
+.anillo circle { fill: none; stroke-width: 12; }
+.anillo .fa { stroke: var(--s-arena2); }
+.anillo .val { stroke: var(--ok); stroke-linecap: round; stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 1.6s var(--ease) .6s; transform: rotate(-90deg); transform-origin: center; }
+.slide.on .anillo .val { stroke-dashoffset: var(--o); }
+.anillo text { font-family: var(--f-a); font-size: 60px; font-weight: 700; fill: var(--ok); text-anchor: middle; dominant-baseline: central; letter-spacing: -2px; }
+.anillo .nom { font-size: 19px; color: var(--s-verde); font-weight: 500; }
+.kw { display: grid; grid-template-columns: 1fr 190px 200px; gap: 16px; align-items: center; padding: 11px 0; border-bottom: 1px solid rgba(47,74,60,.12); }
+.kw .kk { font-family: var(--f-serif); font-size: 29px; color: var(--s-verde); line-height: 1.1; }
+.kw .vol { font-size: 16px; color: #555; }
+.kw .vol i { display: block; height: 6px; margin-top: 8px; border-radius: 3px; background: var(--s-nude); width: 0; transition: width 1.2s var(--ease); transition-delay: calc(var(--i, 0) * 90ms + 700ms); }
+.slide.on .kw .vol i { width: var(--w); }
+.kw .uso { font-size: 15px; color: var(--s-nude-osc); font-weight: 500; }
+
+/* resultados */
+.graf { display: flex; align-items: flex-end; gap: 26px; height: 270px; padding-inline: 18px; border-bottom: 2px solid var(--s-arena2); position: relative; }
+.graf .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; height: 100%; position: relative; z-index: 1; }
+.graf .col i { display: block; width: 100%; height: 0; border-radius: 10px 10px 0 0; background: var(--s-salvia); transition: height 1.2s var(--ease); transition-delay: calc(var(--i, 0) * 140ms + 600ms); }
+.graf .col.fin i { background: var(--s-verde); }
+.slide.on .graf .col i { height: var(--h); }
+.graf .col .val { font-family: var(--f-serif); font-size: 36px; color: var(--s-verde); font-weight: 500; }
+.graf .col .val.sin { font-family: var(--f-sans); font-size: 15px; color: var(--s-gris); text-align: center; }
+.ref { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--s-nude-osc); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--s-nude-osc); padding: 4px 0 0 4px; }
+.ref.base { border-color: #B7AEA5; color: var(--s-gris); }
+.glab { display: flex; gap: 26px; padding: 10px 18px 0; }
+.glab > span { flex: 1; text-align: center; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--s-gris); }
+.ok { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ok); }
+.ok::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(62,142,94,.18); }
+.ind { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.ind .box { padding: 20px 22px; gap: 6px; }
+.ind .de-a { display: flex; align-items: baseline; gap: 12px; }
+.ind .de-a .d1 { font-family: var(--f-serif); font-size: 34px; color: #A39A92; text-decoration: line-through; text-decoration-color: rgba(168,111,94,.6); }
+.ind .de-a .d2 { font-family: var(--f-serif); font-size: 62px; color: var(--s-verde); line-height: 1; }
+.ind .box.oscura .de-a .d2 { color: var(--s-arena); } .ind .box.oscura .de-a .d1 { color: rgba(242,235,227,.5); }
+
+/* presupuesto */
+.presu { display: grid; grid-template-columns: 380px 1fr; gap: 56px; align-items: center; }
+.dona { position: relative; width: 380px; height: 380px; }
+.dona svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.dona circle { fill: none; stroke-width: 40; stroke-dasharray: 0 1000; transition: stroke-dasharray 1.4s var(--ease) .5s; }
+.slide.on .dona circle { stroke-dasharray: var(--l) 1000; }
+.dona .centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 6px; }
+.dona .centro .tot { font-family: var(--f-serif); font-size: 32px; color: var(--s-verde); font-weight: 500; line-height: 1; white-space: nowrap; }
+.dona .centro .per { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--s-nude-osc); }
+.rubro { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto 52px; gap: 14px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid rgba(47,74,60,.12); font-size: 20px; }
+.rubro > i { width: 16px; height: 16px; border-radius: 4px; align-self: center; }
+.rubro small { display: block; font-size: 14px; color: var(--s-gris); margin-top: 3px; }
+.rubro .m { font-weight: 600; color: var(--s-verde); white-space: nowrap; }
+.rubro .pc { color: var(--s-gris); font-size: 16px; text-align: right; }
+.cobro { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.cobro .box { padding: 16px 18px; gap: 4px; }
+.cobro .bt { font-size: 34px; }
+
+/* conclusión y futuro */
+.orden { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.paso { padding: 26px 28px; border-left: 1px solid rgba(242,235,227,.2); display: flex; flex-direction: column; gap: 8px; }
+.paso:first-child { border-left: 0; padding-left: 0; }
+.paso .nn { font-family: var(--f-serif); font-size: 64px; color: var(--s-nude); line-height: 1; }
+.paso b { font-family: var(--f-serif); font-size: 40px; color: var(--s-arena); font-weight: 500; line-height: 1.05; }
+.logros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.logros .box { gap: 4px; }
+.logros .gig { font-size: 92px; }
+.telefono { width: 280px; padding: 11px; background: #1B1D1C; border-radius: 46px; box-shadow: 0 30px 60px rgba(0,0,0,.35); }
+.telefono video { display: block; width: 100%; border-radius: 35px; }
+
+
+/* agregados del pitch nuevo */
+.busca { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.bq { background: var(--s-papel); border-radius: 18px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; min-height: 300px; }
+.bq .ic { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--s-verde); color: var(--s-arena); font-family: var(--f-serif); font-size: 30px; }
+.bq b { font-family: var(--f-serif); font-size: 38px; color: var(--s-verde); font-weight: 500; line-height: 1.05; }
+.bq .no { margin-top: auto; padding-top: 14px; border-top: 1px dashed #C9B9AC; font-size: 15px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--s-nude-osc); }
+.flujo { display: flex; align-items: center; gap: 26px; padding: 22px 28px; border-radius: 18px; background: rgba(242,235,227,.08); border: 1px solid rgba(242,235,227,.16); }
+.flujo > div { display: flex; flex-direction: column; gap: 4px; }
+.flujo b { font-family: var(--f-serif); font-size: 40px; color: var(--s-arena); font-weight: 500; line-height: 1; }
+.flujo .fl2 { font-family: var(--f-serif); font-size: 54px; color: var(--s-nude); }
+.camp-b { flex-direction: row; align-items: center; gap: 20px; padding-block: 20px; }
+.camp-b .nn, .fut .nn { font-family: var(--f-serif); font-size: 64px; color: var(--s-nude-osc); line-height: 1; flex: none; width: 46px; }
+.camp-b.oscura .nn, .fut.oscura .nn { color: var(--s-nude); }
+.camp-b > div, .fut > div { display: flex; flex-direction: column; gap: 4px; }
+.camp-b .bt { font-size: 30px; }
+.gc { padding: 22px; gap: 6px; }
+.gc .bt { font-size: 32px; }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.trio > div { padding: 6px 18px; border-left: 1px solid rgba(242,235,227,.2); display: flex; flex-direction: column; gap: 6px; }
+.trio > div:first-child { border-left: 0; padding-left: 0; }
+.trio b { font-family: var(--f-serif); font-size: 40px; color: var(--s-nude); font-weight: 500; line-height: 1; }
+.trio span { font-size: 18px; color: #D9E1D7; }
+.fut { flex-direction: row; align-items: flex-start; gap: 18px; }
+.fut .bt { font-size: 32px; }
+.ind1 .de-a { display: flex; align-items: baseline; gap: 12px; }
+.ind1 .d1 { font-family: var(--f-serif); font-size: 36px; color: #A39A92; text-decoration: line-through; text-decoration-color: rgba(168,111,94,.6); }
+.ind1 .d2 { font-family: var(--f-serif); font-size: 72px; color: var(--s-verde); line-height: 1; }
+.ind1.oscura .d2 { color: var(--s-arena); } .ind1.oscura .d1 { color: rgba(242,235,227,.5); }
+.video-a.vertical { width: 360px; border-radius: 28px; }
+.shot { position: relative; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 14px 34px rgba(47,74,60,.16); }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+.shot > span { position: absolute; left: 10px; bottom: 10px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; background: var(--s-verde); color: var(--s-arena); padding: 6px 10px; border-radius: 999px; }
+
+.anillos.chicos { gap: 10px; } .anillos.chicos svg { width: 150px; height: 150px; } .anillos.chicos .nom { font-size: 16px; }
+.ind1 .de-a { flex-wrap: nowrap; white-space: nowrap; } .ind1 .d2 { font-size: 60px; } .ind1 .d1 { font-size: 30px; }
+.top .bloque { display: none; }
+
+/* modo PDF: todas las diapositivas una debajo de otra, una por página */
+@page { size: 1600px 900px; margin: 0; }
+html.modo-pdf, html.modo-pdf body { height: auto; overflow: visible; background: #fff; padding: 0; margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.modo-pdf .stage { position: static; transform: none !important; width: 1600px; height: auto; border-radius: 0; box-shadow: none; overflow: visible; background: none; }
+.modo-pdf .slide { position: relative; inset: auto; width: 1600px; height: 900px; opacity: 1; visibility: visible; break-after: page; page-break-after: always; }
+.modo-pdf .slide, .modo-pdf .slide * { transition: none !important; animation: none !important; transition-delay: 0s !important; }
+.modo-pdf .ui, .modo-pdf .prog, .modo-pdf .barrido, .modo-pdf .play, .modo-pdf .notas, .modo-pdf .ix { display: none !important; }
+
+/* v8 */
+/* logos */
+.ico, .ico-red, .ico-s, .ico-wa { display: block; flex: none; }
+.bq .logos { display: flex; gap: 8px; align-items: center; height: 64px; }
+.bq .logos .ico { width: 60px; height: 60px; }
+.bq .logos.chicos .ico { width: 40px; height: 40px; }
+.red .ico-red { width: 52px; height: 52px; margin-bottom: 4px; }
+.red .dato b { font-weight: 600; }
+
+/* ¿cómo le fue? */
+.res3 { display: grid; grid-template-columns: 1fr 1fr .9fr; gap: 22px; align-items: stretch; }
+.panel { background: rgba(242,235,227,.07); border: 1px solid rgba(242,235,227,.14); border-radius: 18px; padding: 22px 24px 18px; display: flex; flex-direction: column; gap: 14px; }
+.ph { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.ok2 { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--s-verde); background: var(--s-nude); padding: 5px 10px; border-radius: 999px; }
+.graf2 { position: relative; display: flex; align-items: flex-end; gap: 30px; height: 360px; padding: 0 16px; border-bottom: 2px solid rgba(242,235,227,.25); }
+.col2 { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; height: 100%; position: relative; z-index: 1; }
+.col2 i { display: block; width: 100%; height: 0; border-radius: 12px 12px 0 0; background: rgba(242,235,227,.28); transition: height 1.3s var(--ease); transition-delay: calc(var(--i, 0) * 220ms + 600ms); }
+.col2.fin i { background: var(--s-nude); }
+.col2.alto i { background: rgba(216,169,154,.35); }
+.slide.on .col2 i { height: var(--h); }
+.v2 { font-family: var(--f-serif); font-size: 46px; color: var(--s-arena); line-height: 1; }
+.col2.fin .v2 { font-size: 56px; }
+.m2 { position: absolute; bottom: -30px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: rgba(242,235,227,.7); }
+.ref2 { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--s-nude); z-index: 2; }
+.ref2 span { position: absolute; left: 0; top: 6px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--s-nude); }
+.panel .graf2 { margin-bottom: 30px; }
+.rol { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 14px; background: rgba(242,235,227,.07); border: 1px solid rgba(242,235,227,.12); }
+.rol > div { display: flex; flex-direction: column; gap: 2px; }
+.rol b { font-family: var(--f-serif); font-size: 32px; color: var(--s-arena); font-weight: 500; line-height: 1; }
+.rol span { font-size: 16px; color: #D9E1D7; }
+.ico-s { width: 40px; height: 40px; }
+.ico-s.hoja { display: grid; place-items: center; border-radius: 50%; background: var(--s-nude); color: var(--s-verde); font-size: 22px; }
+.rol.destino { flex-direction: column; align-items: flex-start; gap: 4px; background: var(--s-nude); border-color: var(--s-nude); }
+.rol.destino .lab { color: var(--s-verde); }
+.rol.destino b { color: var(--s-verde); font-size: 40px; }
+
+/* conclusión */
+.kpi3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.k3 { padding: 6px 34px 6px 0; display: flex; flex-direction: column; gap: 14px; }
+.k3 + .k3 { padding-left: 34px; border-left: 1px solid rgba(242,235,227,.18); }
+.kn { font-family: var(--f-serif); font-size: 128px; line-height: .9; color: var(--s-arena); letter-spacing: -.02em; }
+.kb { position: relative; height: 10px; border-radius: 5px; background: rgba(242,235,227,.14); }
+.kb i { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 5px; background: var(--s-nude); transition: width 1.4s var(--ease) .8s; }
+.slide.on .kb i { width: var(--w); }
+.kb em { position: absolute; top: -6px; width: 2px; height: 22px; background: var(--s-arena); }
+.kc { font-size: 17px; color: #D9E1D7; }
+.camino3 { display: flex; align-items: center; gap: 24px; padding: 24px 30px; border-radius: 18px; background: rgba(242,235,227,.07); border: 1px solid rgba(242,235,227,.14); }
+.camino3 > div { display: flex; align-items: baseline; gap: 12px; }
+.camino3 .nn { font-family: var(--f-serif); font-size: 44px; color: var(--s-nude); line-height: 1; }
+.camino3 b { font-family: var(--f-serif); font-size: 40px; color: var(--s-arena); font-weight: 500; }
+.fl3 { font-family: var(--f-serif); font-size: 40px; color: var(--s-nude); }
+.camino3 .con { margin-left: auto; font-size: 17px; color: #D9E1D7; }
+
+/* asistente: chat */
+.chat { background: #EFE7DD; border-radius: 26px; overflow: hidden; box-shadow: 0 30px 60px rgba(47,74,60,.22); display: flex; flex-direction: column; }
+.ch-top { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--s-verde); color: var(--s-arena); }
+.ch-top b { display: block; font-family: var(--f-serif); font-size: 26px; font-weight: 500; line-height: 1; }
+.ch-top span { font-size: 14px; color: #CFE0C2; }
+.ico-wa { width: 40px; height: 40px; }
+.ch-body { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 82%; padding: 12px 14px 8px; border-radius: 14px; font-size: 18px; line-height: 1.4; position: relative; opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--k) * 550ms + 700ms); }
+.slide.on .msg { opacity: 1; transform: none; }
+.msg i { display: block; text-align: right; font-style: normal; font-size: 12px; color: #8C8C8C; margin-top: 2px; }
+.msg.yo { align-self: flex-end; background: #DCF3D3; border-bottom-right-radius: 4px; }
+.msg.bot { align-self: flex-start; background: #fff; border-bottom-left-radius: 4px; }
+.msg.sis { align-self: center; background: rgba(47,74,60,.1); color: var(--s-verde); font-size: 15px; padding: 8px 14px; }
+.ch-pie { padding: 0 20px 14px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--s-gris); }
+
+/* app */
+.app4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid rgba(47,74,60,.15); }
+.app4 > div { padding: 16px 20px 16px 0; border-bottom: 1px solid rgba(47,74,60,.15); display: flex; flex-direction: column; gap: 4px; }
+.app4 > div:nth-child(even) { padding-left: 20px; border-left: 1px solid rgba(47,74,60,.15); }
+.app4 .nn { font-family: var(--f-mono, monospace); font-size: 13px; color: var(--s-nude-osc); letter-spacing: .1em; }
+.app4 b { font-family: var(--f-serif); font-size: 32px; color: var(--s-verde); font-weight: 500; line-height: 1; }
+.app4 span:last-child { font-size: 17px; color: #4D4A47; }
+.app-panel { position: relative; height: 700px; border-radius: 28px; background: linear-gradient(160deg, var(--s-nude) 0%, #E9C9BE 55%, var(--s-arena2) 100%); display: grid; place-items: center; overflow: hidden; }
+.app-panel::before { content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%; border: 1px solid rgba(47,74,60,.18); }
+.app-panel .video-a.vertical { width: 330px; position: relative; z-index: 1; }
+
+/* interfaz */
+.ui { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; color: #AEB5B1; opacity: 0; transition: opacity .3s; }
+.ui.ver, .ui:focus-within { opacity: 1; }
+.ui button { font: inherit; letter-spacing: .08em; color: #E7ECE9; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.ui button:hover { background: rgba(255,255,255,.16); }
+.ui button:focus-visible, .ix button:focus-visible, .play:focus-visible { outline: 2px solid var(--al-claro); outline-offset: 2px; }
+.ui .info { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prog { position: fixed; left: 0; right: 0; top: 0; height: 4px; z-index: 51; display: flex; gap: 3px; margin-top: env(safe-area-inset-top, 0px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.prog > span { flex: var(--n); background: rgba(255,255,255,.12); border-radius: 2px; overflow: hidden; }
+.prog > span > i { display: block; height: 100%; width: var(--p, 0%); transition: width .5s var(--ease); }
+.reloj.alerta { color: #F08A6C; }
+.notas { position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); width: min(880px, calc(100% - 32px)); max-height: 42vh; overflow: auto; z-index: 52;
+  background: rgba(15,27,33,.96); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 22px; color: #E9EEEB; font-family: var(--f-a); font-size: 16px; line-height: 1.6; }
+.notas h5 { margin: 0 0 8px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--al-claro); font-weight: 500; }
+.ix { position: fixed; inset: 0; z-index: 60; background: rgba(15,27,33,.97); overflow: auto; padding-block: 50px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ix .in { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.ix h3 { grid-column: 1 / -1; margin: 18px 0 0; font-family: var(--f-mono); font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--al-claro); font-weight: 500; }
+.ix button { text-align: left; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 13px 15px; color: #E7ECE9; font-family: var(--f-a); font-size: 14px; cursor: pointer; display: flex; gap: 12px; }
+.ix button.actual { border-color: var(--al-claro); }
+.ix button > span { font-family: var(--f-mono); color: #8D958F; }
+.ix .cerrar { position: fixed; top: 16px; right: max(16px, env(safe-area-inset-right, 0px)); }
+.ayuda { font-family: var(--f-mono); color: #8D958F; font-size: 13px; letter-spacing: .1em; text-align: center; margin-top: 24px; }
+.modo-print .ui, .modo-print .prog, .modo-print .play { display: none !important; }
+.modo-print .stage { border-radius: 0; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; transition-delay: 0s !important; animation-duration: .01ms !important; } }
+</style>
+
+<div class="stage" id="stage">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="g-ig" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#FDF497"/><stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/></radialGradient>
+    <linearGradient id="g-gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4796E3"/><stop offset=".55" stop-color="#9177C7"/><stop offset="1" stop-color="#D96570"/></linearGradient>
+  </defs>
+  <symbol id="i-google" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.5 2.4-7.2 2.4-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></symbol>
+  <symbol id="i-maps" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 3C15.7 3 9 9.6 9 17.8 9 29 24 45 24 45s15-16 15-27.2C39 9.6 32.3 3 24 3z"/><path fill="#4285F4" d="M24 3c-4.4 0-8.4 1.9-11.1 4.9L24 19l11.6-11.3C32.8 4.8 28.6 3 24 3z" opacity=".9"/><path fill="#FBBC04" d="M9 17.8c0 2.7.9 5.6 2.2 8.4L24 19 12.9 7.9C10.5 10.5 9 14 9 17.8z"/><circle cx="24" cy="18" r="5.6" fill="#fff"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="12" fill="url(#g-ig)"/><rect x="11" y="11" width="26" height="26" rx="8" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="32.6" cy="15.6" r="2" fill="#fff"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="12" fill="#111"/><g transform="translate(-1.2 -1)"><path fill="#25F4EE" d="M29 10c.6 4 3.4 6.8 7.4 7.2v5.2c-2.7 0-5.2-.8-7.4-2.3v10.6c0 5.6-4.5 9.3-9.6 9.3S10 36 10 30.9c0-5.4 4.6-9.6 10.3-8.9v5.4c-2.6-.6-5.1 1.1-5.1 3.6 0 2.1 1.7 3.8 3.9 3.8 2.4 0 4.1-1.8 4.1-4.4V10z"/></g><g transform="translate(1.2 1)"><path fill="#FE2C55" d="M29 10c.6 4 3.4 6.8 7.4 7.2v5.2c-2.7 0-5.2-.8-7.4-2.3v10.6c0 5.6-4.5 9.3-9.6 9.3S10 36 10 30.9c0-5.4 4.6-9.6 10.3-8.9v5.4c-2.6-.6-5.1 1.1-5.1 3.6 0 2.1 1.7 3.8 3.9 3.8 2.4 0 4.1-1.8 4.1-4.4V10z"/></g><path fill="#fff" d="M29 10c.6 4 3.4 6.8 7.4 7.2v5.2c-2.7 0-5.2-.8-7.4-2.3v10.6c0 5.6-4.5 9.3-9.6 9.3S10 36 10 30.9c0-5.4 4.6-9.6 10.3-8.9v5.4c-2.6-.6-5.1 1.1-5.1 3.6 0 2.1 1.7 3.8 3.9 3.8 2.4 0 4.1-1.8 4.1-4.4V10z"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#1877F2"/><path fill="#fff" d="M26.6 46V31h4.8l.8-5.6h-5.6v-3.6c0-1.6.5-2.7 2.8-2.7h3v-5c-.5-.1-2.3-.2-4.3-.2-4.3 0-7.2 2.6-7.2 7.4v4.1H16v5.6h4.9v15z"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 48 48"><rect x="2" y="9" width="44" height="30" rx="9" fill="#FF0000"/><path fill="#fff" d="M20 17.5v13l11-6.5z"/></symbol>
+  <symbol id="i-ia" viewBox="0 0 48 48"><path fill="url(#g-gem)" d="M24 3c1.7 10.8 9.9 19 20.7 20.7v.6C33.9 26 25.7 34.2 24 45h-.1C22.2 34.2 14 26 3.3 24.3v-.6C14 22 22.2 13.8 23.9 3z"/></symbol>
+  <symbol id="i-meta" viewBox="0 0 48 48"><path fill="none" stroke="#0081FB" stroke-width="5" stroke-linecap="round" d="M7 30c0-8 3.7-14 8.3-14 6.5 0 10.6 16 17.4 16 4.5 0 8.3-5.6 8.3-11 0-4.6-2-7-4.6-7-6.4 0-10.4 16-17.2 16C11 30 7 27 7 22"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 48 48"><path fill="#25D366" d="M24 4C13 4 4 12.8 4 23.7c0 3.8 1.1 7.4 3.1 10.4L4 44l10.3-3c2.9 1.6 6.2 2.4 9.7 2.4 11 0 20-8.8 20-19.7S35 4 24 4z"/><path fill="#fff" d="M34.6 28.6c-.5-.3-3-1.5-3.5-1.6-.5-.2-.8-.3-1.1.2-.3.5-1.3 1.6-1.6 1.9-.3.3-.6.4-1.1.1-.5-.3-2.2-.8-4.1-2.5-1.5-1.3-2.5-3-2.8-3.5-.3-.5 0-.8.2-1 .2-.2.5-.6.8-.9.3-.3.3-.5.5-.9.2-.3.1-.7 0-.9-.1-.3-1.1-2.7-1.5-3.6-.4-1-.8-.8-1.1-.8h-.9c-.3 0-.9.1-1.3.6-.5.5-1.7 1.6-1.7 4s1.7 4.6 2 5c.2.3 3.4 5.2 8.2 7.3 1.1.5 2 .8 2.7 1 1.1.4 2.2.3 3 .2.9-.1 3-1.2 3.4-2.4.4-1.2.4-2.2.3-2.4-.2-.2-.5-.3-1-.6z"/></symbol>
+</svg>
+
+<!-- ===== BLOQUE 1 · INICIO · Ramiro ===== -->
+<section class="slide aisle" data-b="1 · Inicio" data-q="Ramiro" data-t="1:15" data-notes="Buen día a todos. Somos Aisle Agency: Tiago, Lautaro, Joaquín y yo, Ramiro. (Cada uno levanta la mano cuando lo nombro.)">
+  <div class="cuerpo" style="gap:34px">
+    <div class="hstack" style="gap:18px">
+      <div class="a s" style="width:420px"><svg class="alogo" viewBox="0 0 549 209" aria-label="Aisle Agency"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/><path fill="var(--al-texto)" fill-rule="nonzero" d="M244.12 40.55C249.74 40.55 254.66 41.69 258.90 43.98C263.13 46.26 266.39 49.26 268.68 52.97C268.68 52.97 268.68 41.69 268.68 41.69C268.68 41.69 293.09 41.69 293.09 41.69C293.09 41.69 293.09 121.36 293.09 121.36C293.09 121.36 268.68 121.36 268.68 121.36C268.68 121.36 268.68 110.08 268.68 110.08C266.30 113.79 262.99 116.79 258.75 119.07C254.52 121.36 249.59 122.50 243.98 122.50C237.51 122.50 231.61 120.81 226.27 117.43C220.94 114.05 216.73 109.25 213.64 103.01C210.55 96.78 209.00 89.57 209.00 81.38C209.00 73.20 210.55 66.01 213.64 59.82C216.73 53.64 220.94 48.88 226.27 45.55C231.61 42.22 237.55 40.55 244.12 40.55ZM251.26 61.82C246.40 61.82 242.29 63.56 238.91 67.03C235.53 70.51 233.84 75.29 233.84 81.38C233.84 87.47 235.53 92.30 238.91 95.87C242.29 99.44 246.40 101.23 251.26 101.23C256.11 101.23 260.23 99.47 263.61 95.94C266.99 92.42 268.68 87.62 268.68 81.53C268.68 75.43 266.99 70.63 263.61 67.11C260.23 63.58 256.11 61.82 251.26 61.82ZM306.69 20.28C306.69 16.47 308.04 13.31 310.76 10.78C313.47 8.26 316.97 7.00 321.25 7.00C325.44 7.00 328.89 8.26 331.60 10.78C334.31 13.31 335.67 16.47 335.67 20.28C335.67 23.99 334.31 27.11 331.60 29.63C328.89 32.15 325.44 33.41 321.25 33.41C316.97 33.41 313.47 32.15 310.76 29.63C308.04 27.11 306.69 23.99 306.69 20.28ZM333.38 41.69C333.38 41.69 333.38 121.36 333.38 121.36C333.38 121.36 308.97 121.36 308.97 121.36C308.97 121.36 308.97 41.69 308.97 41.69ZM344.98 95.23C344.98 95.23 369.11 95.23 369.11 95.23C369.40 97.99 370.68 100.23 372.97 101.94C375.25 103.66 378.06 104.51 381.39 104.51C384.44 104.51 386.79 103.92 388.46 102.73C390.12 101.54 390.95 99.99 390.95 98.09C390.95 95.80 389.76 94.11 387.39 93.02C385.01 91.92 381.15 90.71 375.82 89.38C370.11 88.04 365.35 86.64 361.54 85.17C357.74 83.69 354.45 81.36 351.69 78.17C348.93 74.98 347.55 70.68 347.55 65.25C347.55 60.68 348.81 56.52 351.34 52.76C353.86 49.00 357.57 46.02 362.47 43.83C367.37 41.65 373.20 40.55 379.96 40.55C389.96 40.55 397.83 43.03 403.59 47.97C409.35 52.92 412.66 59.49 413.51 67.68C413.51 67.68 390.95 67.68 390.95 67.68C390.57 64.92 389.36 62.73 387.31 61.11C385.27 59.49 382.58 58.68 379.25 58.68C376.39 58.68 374.20 59.23 372.68 60.32C371.16 61.42 370.40 62.92 370.40 64.82C370.40 67.11 371.61 68.82 374.04 69.96C376.46 71.10 380.25 72.25 385.39 73.39C391.29 74.91 396.10 76.41 399.81 77.88C403.52 79.36 406.78 81.74 409.59 85.02C412.39 88.31 413.85 92.71 413.94 98.23C413.94 102.89 412.63 107.06 410.01 110.72C407.40 114.39 403.64 117.26 398.74 119.36C393.83 121.45 388.15 122.50 381.68 122.50C374.73 122.50 368.54 121.31 363.12 118.93C357.69 116.55 353.41 113.29 350.27 109.15C347.12 105.01 345.36 100.37 344.98 95.23ZM451.52 15.71C451.52 15.71 451.52 121.36 451.52 121.36C451.52 121.36 427.11 121.36 427.11 121.36C427.11 121.36 427.11 15.71 427.11 15.71ZM542.07 87.38C542.07 87.38 486.82 87.38 486.82 87.38C487.20 92.33 488.79 96.11 491.60 98.73C494.41 101.35 497.86 102.66 501.95 102.66C508.04 102.66 512.28 100.09 514.66 94.95C514.66 94.95 540.64 94.95 540.64 94.95C539.31 100.18 536.91 104.89 533.43 109.08C529.96 113.27 525.61 116.55 520.37 118.93C515.14 121.31 509.28 122.50 502.81 122.50C495.01 122.50 488.06 120.83 481.97 117.50C475.88 114.17 471.12 109.41 467.69 103.23C464.26 97.04 462.55 89.81 462.55 81.53C462.55 73.25 464.24 66.01 467.62 59.82C471.00 53.64 475.73 48.88 481.82 45.55C487.91 42.22 494.91 40.55 502.81 40.55C510.52 40.55 517.37 42.17 523.37 45.41C529.37 48.64 534.05 53.26 537.43 59.25C540.81 65.25 542.50 72.25 542.50 80.24C542.50 82.53 542.36 84.90 542.07 87.38ZM517.51 73.82C517.51 69.63 516.09 66.30 513.23 63.82C510.38 61.35 506.81 60.11 502.52 60.11C498.43 60.11 494.98 61.30 492.17 63.68C489.37 66.06 487.63 69.44 486.96 73.82Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M256.78 151.00C259.41 151.00 261.71 151.52 263.67 152.55C265.63 153.58 267.20 154.86 268.37 156.40C268.37 156.40 268.37 151.55 268.37 151.55C268.37 151.55 275.36 151.55 275.36 151.55C275.36 151.55 275.36 184.99 275.36 184.99C275.36 184.99 268.37 184.99 268.37 184.99C268.37 184.99 268.37 180.01 268.37 180.01C267.20 181.59 265.60 182.91 263.58 183.96C261.56 185.01 259.25 185.54 256.66 185.54C253.79 185.54 251.16 184.80 248.77 183.32C246.38 181.84 244.49 179.78 243.09 177.13C241.70 174.48 241.00 171.48 241.00 168.12C241.00 164.76 241.70 161.78 243.09 159.19C244.49 156.60 246.39 154.59 248.80 153.15C251.21 151.72 253.87 151.00 256.78 151.00ZM258.24 157.01C256.46 157.01 254.80 157.44 253.26 158.31C251.72 159.18 250.48 160.46 249.53 162.14C248.58 163.82 248.10 165.81 248.10 168.12C248.10 170.42 248.58 172.45 249.53 174.19C250.48 175.93 251.73 177.25 253.29 178.16C254.85 179.07 256.50 179.53 258.24 179.53C260.02 179.53 261.68 179.08 263.21 178.19C264.75 177.30 266.00 176.00 266.95 174.28C267.90 172.56 268.37 170.54 268.37 168.24C268.37 165.93 267.90 163.93 266.95 162.23C266.00 160.53 264.75 159.24 263.21 158.34C261.68 157.45 260.02 157.01 258.24 157.01ZM320.03 156.40C320.03 156.40 320.03 151.55 320.03 151.55C320.03 151.55 327.01 151.55 327.01 151.55C327.01 151.55 327.01 185.54 327.01 185.54C327.01 188.61 326.36 191.35 325.07 193.76C323.77 196.17 321.90 198.06 319.45 199.44C317.01 200.81 314.08 201.50 310.68 201.50C306.15 201.50 302.39 200.44 299.39 198.31C296.40 196.19 294.70 193.31 294.30 189.66C294.30 189.66 301.15 189.66 301.15 189.66C301.68 191.40 302.80 192.81 304.52 193.88C306.24 194.95 308.30 195.49 310.68 195.49C313.48 195.49 315.73 194.64 317.45 192.94C319.17 191.24 320.03 188.77 320.03 185.54C320.03 185.54 320.03 179.95 320.03 179.95C318.86 181.53 317.27 182.86 315.27 183.93C313.26 185.00 310.99 185.54 308.44 185.54C305.52 185.54 302.86 184.80 300.46 183.32C298.05 181.84 296.15 179.78 294.75 177.13C293.36 174.48 292.66 171.48 292.66 168.12C292.66 164.76 293.36 161.78 294.75 159.19C296.15 156.60 298.05 154.59 300.46 153.15C302.86 151.72 305.52 151.00 308.44 151.00C311.03 151.00 313.32 151.52 315.33 152.55C317.33 153.58 318.90 154.86 320.03 156.40ZM309.89 157.01C308.12 157.01 306.45 157.44 304.92 158.31C303.38 159.18 302.14 160.46 301.19 162.14C300.23 163.82 299.76 165.81 299.76 168.12C299.76 170.42 300.23 172.45 301.19 174.19C302.14 175.93 303.39 177.25 304.95 178.16C306.51 179.07 308.15 179.53 309.89 179.53C311.68 179.53 313.33 179.08 314.87 178.19C316.41 177.30 317.65 176.00 318.61 174.28C319.56 172.56 320.03 170.54 320.03 168.24C320.03 165.93 319.56 163.93 318.61 162.23C317.65 160.53 316.41 159.24 314.87 158.34C313.33 157.45 311.68 157.01 309.89 157.01ZM377.03 170.85C377.03 170.85 351.48 170.85 351.48 170.85C351.68 173.52 352.67 175.66 354.45 177.28C356.23 178.90 358.42 179.71 361.01 179.71C364.73 179.71 367.36 178.15 368.90 175.04C368.90 175.04 376.36 175.04 376.36 175.04C375.35 178.11 373.52 180.63 370.87 182.59C368.22 184.56 364.93 185.54 361.01 185.54C357.81 185.54 354.95 184.82 352.42 183.38C349.89 181.94 347.90 179.92 346.47 177.31C345.03 174.70 344.31 171.68 344.31 168.24C344.31 164.80 345.01 161.77 346.41 159.16C347.80 156.55 349.77 154.54 352.30 153.12C354.82 151.71 357.73 151.00 361.01 151.00C364.16 151.00 366.97 151.69 369.44 153.06C371.91 154.44 373.83 156.37 375.21 158.86C376.58 161.35 377.27 164.21 377.27 167.45C377.27 168.70 377.19 169.84 377.03 170.85ZM370.05 165.26C370.01 162.71 369.10 160.67 367.32 159.13C365.54 157.60 363.33 156.83 360.70 156.83C358.31 156.83 356.27 157.59 354.57 159.10C352.87 160.62 351.86 162.67 351.54 165.26ZM425.17 165.26C425.17 165.26 425.17 184.99 425.17 184.99C425.17 184.99 418.31 184.99 418.31 184.99C418.31 184.99 418.31 166.30 418.31 166.30C418.31 163.30 417.56 161.00 416.06 159.41C414.56 157.81 412.52 157.01 409.93 157.01C407.34 157.01 405.29 157.81 403.77 159.41C402.25 161.00 401.49 163.30 401.49 166.30C401.49 166.30 401.49 184.99 401.49 184.99C401.49 184.99 394.57 184.99 394.57 184.99C394.57 184.99 394.57 151.55 394.57 151.55C394.57 151.55 401.49 151.55 401.49 151.55C401.49 151.55 401.49 155.37 401.49 155.37C402.63 153.99 404.07 152.92 405.83 152.15C407.59 151.38 409.47 151.00 411.45 151.00C414.08 151.00 416.44 151.55 418.52 152.64C420.60 153.73 422.23 155.35 423.41 157.50C424.58 159.64 425.17 162.23 425.17 165.26ZM458.55 151.00C462.60 151.00 465.95 151.96 468.60 153.88C471.25 155.81 473.04 158.55 473.97 162.11C473.97 162.11 466.50 162.11 466.50 162.11C465.90 160.45 464.93 159.15 463.59 158.22C462.26 157.29 460.58 156.83 458.55 156.83C455.72 156.83 453.47 157.83 451.79 159.83C450.11 161.83 449.27 164.64 449.27 168.24C449.27 171.84 450.11 174.65 451.79 176.68C453.47 178.70 455.72 179.71 458.55 179.71C462.56 179.71 465.21 177.95 466.50 174.43C466.50 174.43 473.97 174.43 473.97 174.43C473.00 177.83 471.18 180.53 468.51 182.53C465.84 184.54 462.52 185.54 458.55 185.54C455.36 185.54 452.52 184.82 450.06 183.38C447.59 181.94 445.65 179.92 444.26 177.31C442.86 174.70 442.16 171.68 442.16 168.24C442.16 164.80 442.86 161.77 444.26 159.16C445.65 156.55 447.59 154.54 450.06 153.12C452.52 151.71 455.36 151.00 458.55 151.00ZM521.50 151.55C521.50 151.55 500.98 200.71 500.98 200.71C500.98 200.71 493.82 200.71 493.82 200.71C493.82 200.71 500.62 184.44 500.62 184.44C500.62 184.44 487.45 151.55 487.45 151.55C487.45 151.55 495.16 151.55 495.16 151.55C495.16 151.55 504.57 177.04 504.57 177.04C504.57 177.04 514.34 151.55 514.34 151.55Z"/></svg></div>
+      <h1 class="t1 w" style="font-size:76px">Marketing digital + automatización con IA. <span class="v">Resultados que se miden.</span></h1>
+    </div>
+    <div class="equipo">
+      <div class="eq blk"><span class="n">01</span><b>Tiago Cabral</b><span class="rol">SEO y Paid Media</span><span class="red">Instagram</span><span class="marca"><svg class="aiso" viewBox="5 12 210 182" aria-hidden="true"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/></svg></span></div>
+      <div class="eq blk"><span class="n">02</span><b>Lautaro Di Virgilio</b><span class="rol">Contenido y Social Media</span><span class="red">YouTube</span><span class="marca"><svg class="aiso" viewBox="5 12 210 182" aria-hidden="true"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/></svg></span></div>
+      <div class="eq blk"><span class="n">03</span><b>Joaquín Zacskek</b><span class="rol">Project Manager y estrategia de marca</span><span class="red">Facebook</span><span class="marca"><svg class="aiso" viewBox="5 12 210 182" aria-hidden="true"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/></svg></span></div>
+      <div class="eq blk"><span class="n">04</span><b>Ramiro Della Torre</b><span class="rol">IA y análisis de datos</span><span class="red">TikTok</span><span class="marca"><svg class="aiso" viewBox="5 12 210 182" aria-hidden="true"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/></svg></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide aisle noche" data-b="1 · Inicio" data-q="Ramiro" data-t="1:15" data-notes="Pasar el video de la agencia con el botón. Después: «Hoy les vamos a mostrar cómo logramos un cambio rotundo en Selvara en tan solo tres meses.»">
+  <div class="cuerpo" style="gap:26px;align-items:center">
+    <div class="video-a a s"><video src="media/aisle.mp4" poster="media/aisle-poster.jpg" playsinline preload="metadata"></video><button class="play" type="button"><span>▶ Reproducir el video de la agencia</span></button></div>
+  </div>
+</section>
+
+<section class="slide selv sinmarca" data-b="1 · Inicio" data-q="Ramiro" data-t="1:15" data-notes="Cuando la conocimos, Selvara tenía buenos tratamientos y un equipo que acompaña a cada clienta. Pero en internet no existía: ni web, ni redes, ni una sola reseña en Google. Mientras tanto, los líderes de la zona tenían cientos. Hoy tiene una marca nueva, cuatro redes activas, una web donde se reserva sin llamar a nadie y presencia en Google. Les contamos cómo llegamos hasta acá y cómo logramos los objetivos.">
+  <div class="cuerpo" style="gap:22px">
+    <div class="hstack"><div class="ey a">Selvara, antes y ahora</div><h2 class="h w" style="font-size:64px">De no existir en internet <em>a esto, en tres meses.</em></h2></div>
+    <div class="aa">
+      <div class="antes blk">
+        <span class="lab">Agosto de 2026</span>
+        <div class="marca-antes"><svg class="iso loto" viewBox="-10 -10 350 290" aria-hidden="true"><g stroke-width="7"><path class="h" d="M164.26 261C79.21 239.52-1.76 140.38 0 51 87.17 70.82 163.9 173.28 164.26 261Z"/><path class="h" d="M164.26 261C164.62 173.28 241.34 70.82 328.51 51 330.27 140.38 249.31 239.52 164.26 261Z"/><path class="h" d="M164.26 261C103.79 212.15 70.43 99.72 97.44 26 159.2 74.48 189.98 187.65 164.26 261Z"/><path class="h" d="M164.26 261C138.54 187.65 169.32 74.48 231.07 26 258.09 99.72 224.72 212.15 164.26 261Z"/><line class="h" x1="164.26" y1="66" x2="164.26" y2="246"/><circle class="h" cx="164.26" cy="26" r="23.5"/></g></svg><div><span class="mt1">Selvara</span><span class="chico">El loto original, sin un sistema de marca para lo digital.</span></div></div>
+        <div class="vacios">
+          <div class="vacio"><b>—</b><span>Web</span></div>
+          <div class="vacio"><b>0</b><span>Redes</span></div>
+          <div class="vacio"><b>0</b><span>Reseñas</span></div>
+          <div class="vacio"><b>0 %</b><span>Presencia digital</span></div>
+        </div>
+        <span class="chico">Mientras, los líderes de la zona ya tenían cientos de reseñas.</span>
+      </div>
+      <div class="despues">
+        <div class="marca-hoy blk"><svg class="logo-hoy" viewBox="0 0 1060 330" role="img" aria-label="Logo vigente de Selvara"><defs><linearGradient id="selvaraGrad" gradientUnits="userSpaceOnUse" x1="30" y1="10" x2="288" y2="349"><stop offset="0.0" stop-color="#28402F"></stop><stop offset="0.46" stop-color="#4A5A3E"></stop><stop offset="1.0" stop-color="#A3BC8C"></stop></linearGradient></defs><g transform="translate(86.000 30.320) scale(0.740000)" fill="none" stroke="url(#selvaraGrad)" stroke-width="10.81081081081081" stroke-linecap="round" stroke-linejoin="round"><path d="M82.00 358.00C-1.36 270.16 -25.03 113.94 22.00 4.00C87.44 94.88 116.56 250.17 82.00 358.00Z"></path><path d="M82.00 358.00C58.40 252.49 109.50 118.66 193.00 52.00C202.75 152.49 156.17 287.95 82.00 358.00Z"></path><path d="M82.00 358.00C105.82 271.78 195.60 196.77 283.00 184.00C250.78 260.52 163.68 338.62 82.00 358.00Z"></path></g><line x1="349.12" y1="86" x2="349.12" y2="234" stroke="#D8A99A" stroke-width="1.4"></line><text x="395.12" y="178" font-family="Cormorant Garamond" font-size="84" font-weight="400" fill="#2F4A3C" text-anchor="start" letter-spacing="11">SELVARA</text><text x="397.12" y="224" font-family="Cormorant Garamond" font-size="25" font-weight="400" fill="#C08A7C" text-anchor="start" letter-spacing="7.6">ESTÉTICA INTEGRAL</text></svg>
+          <div class="paleta-hoy"><i style="background:#2F4A3C"></i><i style="background:#4A5A3E"></i><i style="background:#D8A99A"></i><i style="background:#F2EBE3"></i><i style="background:#333333"></i></div>
+          <div class="fuentes-hoy"><span style="font-family:var(--f-serif);font-size:30px;color:var(--s-verde)">Cormorant</span><span style="font-family:var(--f-sans);font-size:22px">Jost</span></div>
+        </div>
+        <div class="shots">
+          <figure class="sh ancha a s"><div><img src="media/web.jpg" alt="Inicio del sitio web de Selvara"></div><figcaption>Web con reserva</figcaption></figure>
+          <figure class="sh a s"><div><img src="media/ig.jpg" alt="Perfil de Instagram de Selvara"></div><figcaption>Instagram</figcaption></figure>
+          <figure class="sh a s"><div><img src="media/tt.jpg" alt="Perfil de TikTok de Selvara"></div><figcaption>TikTok</figcaption></figure>
+          <figure class="sh a s"><div><img src="media/yt.jpg" alt="Canal de YouTube de Selvara"></div><figcaption>YouTube</figcaption></figure>
+          <figure class="sh a s"><div><img src="media/google.jpg" alt="Selvara en Google con su perfil de empresa" style="object-position:right top"></div><figcaption>Google Business</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 2 · INVESTIGACIÓN · Tiago ===== -->
+<section class="slide selv" data-b="2 · Investigación" data-q="Tiago" data-t="1:45" data-notes="Antes de proponer algo, investigamos el mercado de Rosario para entender cómo elige la gente un centro de estética. Primero miramos a los centros que lideran la zona. Ninguno ganaba por tener el mejor Instagram ni las mejores promociones: ganaban porque la gente confiaba en ellos, y esa confianza se veía en las reseñas. El más fuerte tenía más de 500. Y el 97 % de las personas lee reseñas antes de elegir un negocio de su zona.">
+  <div class="cuerpo">
+    <div class="hstack"><div class="ey a">Investigación · cómo elige la gente en Rosario</div><h2 class="h w">Los líderes no ganaban por Instagram. <em>Ganaban porque confiaban en ellos.</em></h2></div>
+    <div class="split" style="grid-template-columns:1fr 1.1fr;gap:40px;align-items:stretch">
+      <div class="box blk oscura" style="justify-content:center"><span class="lab">El más fuerte de la zona</span><span class="gig num" style="font-size:190px">+<span data-n="500">500</span></span><span class="tx" style="font-size:21px">reseñas en Google, con <b class="num" data-n="4.9" data-dec="1">4,9</b> de promedio <span class="estr">★★★★★</span></span></div>
+      <div class="hstack" style="gap:16px">
+        <div class="box blk"><span class="lab">Lo que no los hacía ganar</span><span class="bt">El mejor Instagram o las mejores promociones.</span></div>
+        <div class="box blk"><span class="lab">Lo que sí</span><span class="bt">La confianza, y se ve en las reseñas.</span></div>
+        <div class="box blk" style="flex-direction:row;align-items:center;gap:22px"><span class="gig num" style="font-size:80px"><span data-n="97">97</span> %</span><span class="tx" style="font-size:18px">de las personas lee reseñas antes de elegir un negocio de su zona (BrightLocal, 2026).</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv" data-b="2 · Investigación" data-q="Tiago" data-t="1:45" data-notes="Después miramos cómo busca la gente. Hoy, quien quiere un tratamiento googlea, mira Maps, entra a las redes y hasta le pregunta a una inteligencia artificial. Ahí Selvara no aparecía en ningún lado.">
+  <div class="cuerpo">
+    <div class="hstack"><div class="ey a">Cómo busca la gente</div><h2 class="h w">Googlea, mira Maps, entra a las redes <em>y le pregunta a la IA.</em></h2></div>
+    <div class="busca">
+      <div class="bq blk"><div class="logos"><svg class="ico"><use href="#i-google"/></svg></div><b>Google</b><span class="chico">«depilación definitiva en Rosario»</span><span class="no">Selvara no aparecía</span></div>
+      <div class="bq blk"><div class="logos"><svg class="ico"><use href="#i-maps"/></svg></div><b>Google Maps</b><span class="chico">El centro más cercano y con mejores reseñas</span><span class="no">Selvara no aparecía</span></div>
+      <div class="bq blk"><div class="logos chicos"><svg class="ico"><use href="#i-ig"/></svg><svg class="ico"><use href="#i-tt"/></svg><svg class="ico"><use href="#i-fb"/></svg><svg class="ico"><use href="#i-yt"/></svg></div><b>Redes</b><span class="chico">Ver resultados, precios y cómo trabajan</span><span class="no">Selvara no aparecía</span></div>
+      <div class="bq blk"><div class="logos"><svg class="ico"><use href="#i-ia"/></svg></div><b>ChatGPT y Gemini</b><span class="chico">«¿Cuál es un buen centro de estética en Rosario?»</span><span class="no">Selvara no aparecía</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv deep" data-b="2 · Investigación" data-q="Tiago" data-t="1:45" data-notes="Además, nadie hablaba de acompañar a la persona en todo el proceso: explicarle qué le van a hacer y armarle un plan a medida. Justo lo que mejor hace Selvara. Y casi nadie le hablaba a los hombres, que cada vez se cuidan más. Conclusión: Selvara tenía el mejor diferencial, pero nadie lo sabía. Primero la gente tenía que encontrarla, y eso se mide en visitas a la web. Y cuando la encontrara, tenía que poder reservar fácil, y eso se mide en turnos. De ahí salen nuestros dos objetivos.">
+  <div class="cuerpo" style="gap:30px">
+    <div class="hstack"><div class="ey a">Lo que encontramos</div><p class="cita w" style="font-size:70px">Selvara tenía el mejor diferencial. <em>Pero nadie lo sabía.</em></p></div>
+    <div class="g2">
+      <div class="box blk"><span class="lab">Nadie acompañaba el proceso</span><span class="tx" style="font-size:19px">Explicar qué te van a hacer y armarte un plan a medida: lo que mejor hace Selvara.</span></div>
+      <div class="box blk"><span class="lab">Casi nadie le hablaba a los hombres</span><span class="tx" style="font-size:19px">Que cada vez se cuidan más.</span></div>
+    </div>
+    <div class="flujo a">
+      <div><span class="lab">Primero</span><b>Que la encuentren</b><span class="chico">Se mide en visitas a la web.</span></div>
+      <span class="fl2">→</span>
+      <div><span class="lab">Después</span><b>Que reserve fácil</b><span class="chico">Se mide en turnos.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 3 · OBJETIVOS · Tiago ===== -->
+<section class="slide selv" data-b="3 · Objetivos, estrategias y KPIs" data-q="Tiago" data-t="2:00" data-notes="Esos son nuestros dos objetivos. Uno es llegar a 3.000 visitas por mes a la web en los tres meses del plan: la web es donde termina todo el recorrido. El segundo es que reserven: subir un 40 % los turnos en noviembre. Selvara venía de 120 turnos por mes, así que la meta es 168, con clientes nuevos.">
+  <div class="cuerpo">
+    <div class="hstack"><div class="ey a">Objetivos · septiembre a noviembre de 2026</div><h2 class="h w">Que la encuentren. <em>Y que reserve.</em></h2></div>
+    <div class="g2">
+      <div class="box blk"><span class="pill">Objetivo 1 · Que la encuentren</span><span class="gig num" style="font-size:150px"><span data-n="3000">3.000</span></span><span class="tx">visitas por mes a la web, durante los tres meses del plan.</span><span class="chico">La web es donde termina todo el recorrido.</span></div>
+      <div class="box blk oscura"><span class="pill n">Objetivo 2 · Que reserve</span><span class="gig num" style="font-size:150px">+<span data-n="40">40</span> %</span><span class="tx">de turnos en noviembre, con clientes nuevos.</span>
+        <div class="barra" style="--w:71.4%"><i></i></div><div class="escala num"><span>Venía de 120 por mes</span><span>Meta: 168</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv" data-b="3 · Objetivos, estrategias y KPIs" data-q="Tiago" data-t="2:00" data-notes="Para cada objetivo elegimos un camino distinto. Para que la encuentren: contenido en las 4 redes (TikTok, Instagram, Facebook y YouTube), publicidad en Meta y Google, SEO para aparecer en Google y GEO para aparecer en la IA. Para que reserve: una web con el turno en tres pasos, Google Business en Maps, reseñas reales y un WhatsApp donde siempre responde una persona. Y medimos dos números: visitas y turnos. Todo arranca por que la gente nos vea, y eso empieza por el contenido.">
+  <div class="cuerpo" style="gap:28px">
+    <div class="hstack"><div class="ey a">Estrategias</div><h2 class="h w">Un camino distinto para cada objetivo.</h2></div>
+    <div class="camino">
+      <div class="box blk"><span class="lab">Para que la encuentren</span><span class="bt">Estar donde la gente mira y busca.</span><div class="chips"><span>TikTok</span><span>Instagram</span><span>Facebook</span><span>YouTube</span><span>Meta Ads</span><span>Google Ads</span><span>SEO</span><span>GEO: aparecer en la IA</span></div></div>
+      <div class="box blk oscura"><span class="lab">Para que reserve</span><span class="bt">Sacarle todas las trabas.</span><div class="chips"><span>Web: turno en 3 pasos</span><span>Google Business en Maps</span><span>Reseñas reales</span><span>WhatsApp con una persona</span></div></div>
+    </div>
+    <div class="mide blk"><span class="lab">KPIs</span><b>Medimos dos números: visitas y turnos.</b><span class="chico">Todo lo demás explica por qué suben o no.</span></div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 4 · CONTENIDO Y PUBLICIDAD · Lautaro ===== -->
+<section class="slide selv" data-b="4 · Contenido y publicidad" data-q="Lautaro" data-t="2:00" data-notes="Para cumplir los dos objetivos usamos dos cosas que se necesitan entre sí: el contenido que genera confianza y la publicidad que la hace llegar a más gente. Cada red tiene un trabajo: TikTok, que nos descubra gente nueva; Instagram, para quien ya nos vio y lo está pensando; Facebook da prueba social; y YouTube responde al que está comparando.">
+  <div class="cuerpo" style="gap:28px">
+    <div class="hstack"><div class="ey a">Contenido · genera confianza</div><h2 class="h w">Cuatro redes, <em>cuatro trabajos distintos.</em></h2></div>
+    <div class="g4">
+      <div class="box blk red"><svg class="ico-red"><use href="#i-tt"/></svg><span class="lab">Descubre</span><span class="rn">TikTok</span><p class="tx">Gente nueva que todavía no nos conoce.</p><span class="dato num"><b data-n="12200">12.200</b> visualizaciones</span></div>
+      <div class="box blk red"><svg class="ico-red"><use href="#i-ig"/></svg><span class="lab">Hace pensar</span><span class="rn">Instagram</span><p class="tx">Para quien ya nos vio y lo está pensando.</p><span class="dato num">De 985 a <b data-n="3800">3.800</b> por mes</span></div>
+      <div class="box blk red"><svg class="ico-red"><use href="#i-fb"/></svg><span class="lab">Da prueba social</span><span class="rn">Facebook</span><p class="tx">Que otros nos recomienden.</p><span class="dato num"><b data-n="3208">3.208</b> visualizaciones</span></div>
+      <div class="box blk red"><svg class="ico-red"><use href="#i-yt"/></svg><span class="lab">Responde</span><span class="rn">YouTube</span><p class="tx">Al que está comparando antes de decidir.</p><span class="dato num"><b data-n="10005">10.005</b> vistas</span></div>
+    </div>
+    <p class="chico a">Datos reales de las cuentas, capturas del 02 al 06/11/2026.</p>
+  </div>
+</section>
+
+<section class="slide selv" data-b="4 · Contenido y publicidad" data-q="Lautaro" data-t="2:00" data-notes="Con el contenido andando y las primeras reseñas, pusimos 4.400 dólares de publicidad. El 60 % fue a Meta, porque es lo mejor para arrancar, llegar a mucha gente y empujar las visitas. Ahí hicimos las 3 campañas principales: Alcance, que muestra nuestros mejores videos a gente nueva; Tráfico, que lleva directo a reservar; y Mensajes, que abre un WhatsApp para quien quiere preguntar antes.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><div class="ey a">Publicidad · USD 4.400</div><h2 class="h w">Meta: <em>llegar a mucha gente.</em></h2></div>
+    <div class="split" style="grid-template-columns:1fr 1.1fr;gap:46px;align-items:start">
+      <div class="hstack" style="gap:18px">
+        <div class="repart blk"><div style="flex:60;background:var(--s-verde)">Meta 60 % · USD 2.640</div><div style="flex:40;background:var(--s-nude-osc)">Google 40 % · USD 1.760</div></div>
+        <p class="tx a" style="font-size:20px">Lo mejor para arrancar, llegar a mucha gente y empujar las visitas.</p>
+        <div class="shot blk" style="height:250px"><img src="media/ads-meta.jpg" alt="Campañas de Meta Ads de Selvara"><span>Meta Ads</span></div>
+      </div>
+      <div class="hstack" style="gap:14px">
+        <div class="box blk camp-b"><span class="nn">1</span><div><span class="lab">Alcance · 40 %</span><span class="bt">Muestra nuestros mejores videos a gente nueva.</span></div></div>
+        <div class="box blk camp-b"><span class="nn">2</span><div><span class="lab">Tráfico · 35 %</span><span class="bt">Lleva directo a reservar.</span></div></div>
+        <div class="box blk camp-b oscura"><span class="nn">3</span><div><span class="lab">Mensajes · 25 %</span><span class="bt">Abre un WhatsApp para quien quiere preguntar antes.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv" data-b="4 · Contenido y publicidad" data-q="Lautaro" data-t="2:00" data-notes="El otro 40 % fue a Google, porque ahí está quien ya busca un tratamiento. Ahí hicimos seis campañas: Depilación, Faciales, Hombres, Corporales, Marca y Máximo rendimiento.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><div class="ey a">Publicidad · Google</div><h2 class="h w">Google: <em>atrapar a quien ya busca.</em></h2></div>
+    <div class="split" style="grid-template-columns:1.15fr 1fr;gap:40px;align-items:start">
+      <div class="g3" style="gap:14px">
+        <div class="box blk gc"><span class="lab">30 %</span><span class="bt">Depilación</span></div>
+        <div class="box blk gc"><span class="lab">25 %</span><span class="bt">Faciales</span></div>
+        <div class="box blk gc oscura"><span class="lab">15 %</span><span class="bt">Hombres</span></div>
+        <div class="box blk gc"><span class="lab">10 %</span><span class="bt">Corporales</span></div>
+        <div class="box blk gc"><span class="lab">5 %</span><span class="bt">Marca</span></div>
+        <div class="box blk gc"><span class="lab">15 %</span><span class="bt">Máximo rendimiento</span></div>
+      </div>
+      <div class="hstack" style="gap:12px">
+        <div class="shot blk" style="height:300px"><img src="media/ads-google.jpg" alt="Campañas de Google Ads de Selvara"><span>Google Ads</span></div>
+        <p class="chico a">Cinco campañas aparecen cuando alguien busca un tratamiento; Máximo rendimiento nos muestra en Maps, YouTube y Gmail.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv deep" data-b="4 · Contenido y publicidad" data-q="Lautaro" data-t="2:00" data-notes="¿Cómo le fue? Las visitas llegaron a 3.180 en noviembre y cada turno que trajo la publicidad bajó de 105 dólares a 62. Meta hace que nos conozcan, Google atrapa a quien ya nos busca y el contenido hace que confíen. Y todos los anuncios llevan al mismo lugar: la web. Rama.">
+  <div class="cuerpo" style="gap:24px">
+    <div class="hstack"><span class="pill n a">Simulación de cátedra</span><h2 class="h w">¿Cómo le fue a la publicidad?</h2></div>
+    <div class="res3">
+      <div class="panel a">
+        <div class="ph"><span class="lab">Visitas a la web</span><span class="ok2">Meta superada</span></div>
+        <div class="graf2">
+          <div class="ref2" style="bottom:calc(3000 / 3500 * 100%)"><span>Meta 3.000</span></div>
+          <div class="col2" style="--i:0"><span class="v2 num">1.720</span><i style="--h:49%"></i><span class="m2">Octubre</span></div>
+          <div class="col2 fin" style="--i:1"><span class="v2 num" data-n="3180">3.180</span><i style="--h:90.9%"></i><span class="m2">Noviembre</span></div>
+        </div>
+      </div>
+      <div class="panel a">
+        <div class="ph"><span class="lab">Costo por turno de publicidad</span><span class="ok2">−41 %</span></div>
+        <div class="graf2">
+          <div class="col2 alto" style="--i:0"><span class="v2 num">USD 105</span><i style="--h:88%"></i><span class="m2">Octubre</span></div>
+          <div class="col2 fin" style="--i:1"><span class="v2 num">USD <span data-n="62">62</span></span><i style="--h:52%"></i><span class="m2">Noviembre</span></div>
+        </div>
+      </div>
+      <div class="hstack" style="gap:12px">
+        <div class="rol a"><svg class="ico-s"><use href="#i-meta"/></svg><div><b>Meta</b><span>hace que nos conozcan</span></div></div>
+        <div class="rol a"><svg class="ico-s"><use href="#i-google"/></svg><div><b>Google</b><span>atrapa a quien ya nos busca</span></div></div>
+        <div class="rol a"><span class="ico-s hoja">✿</span><div><b>El contenido</b><span>hace que confíen</span></div></div>
+        <div class="rol destino a"><span class="lab">Todos los anuncios llevan a</span><b>la web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 5 · WEB, SEO Y GOOGLE · Ramiro ===== -->
+<section class="slide selv" data-b="5 · Web, SEO y Google" data-q="Ramiro" data-t="2:00" data-notes="Toda esa gente, la que viene de las redes, de Meta y de Google, termina en un mismo lugar: la web. Una sola misión: que la persona entienda qué le van a hacer, cuánto cuesta y reserve sin llamar a nadie. Por eso les vamos a mostrar un breve video del sitio web.">
+  <div class="cuerpo">
+    <div class="split" style="grid-template-columns:.85fr 1.15fr;gap:50px">
+      <div class="hstack" style="gap:20px">
+        <div class="ey a">La web</div>
+        <h2 class="h w">Entender, saber cuánto cuesta <em>y reservar sin llamar.</em></h2>
+        <div class="check">
+          <div class="a">Una página por tratamiento, con precio orientativo, duración y «Reservar» arriba de todo.</div>
+          <div class="a">Reserva en 3 pasos: tratamiento, profesional y horario.</div>
+          <div class="a">WhatsApp siempre a un toque.</div>
+        </div>
+      </div>
+      <div class="a r"><div class="laptop"><video data-auto src="media/web.mp4" poster="media/web-poster.jpg" muted loop playsinline preload="metadata"></video></div><div class="laptop-base"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv deep" data-b="5 · Web, SEO y Google" data-q="Ramiro" data-t="2:00" data-notes="Pasar el video del sitio con el botón (tiene efectos de sonido). Después, si hay tiempo, mostrarlo en vivo: Inicio → un tratamiento → Reservar.">
+  <div class="cuerpo" style="gap:20px;align-items:center">
+    <div class="video-a a s" style="width:880px"><video src="media/web-sonido.mp4" poster="media/web-sonido-poster.jpg" playsinline preload="metadata"></video><button class="play" type="button"><span>▶ Reproducir el recorrido por la web</span></button></div>
+    <p class="chico a">Después, en vivo: a0201013.ferozo.com/selvara</p>
+  </div>
+</section>
+
+<section class="slide selv" data-b="5 · Web, SEO y Google" data-q="Ramiro" data-t="2:00" data-notes="Medimos la web con Lighthouse, la herramienta de Google: rendimiento 98, accesibilidad 97, buenas prácticas 100 y SEO 100 en escritorio. Además, está pensada primero para el celular, las fotos pasaron a WebP para que cargue rápido y usamos un plugin por función para que no se vuelva lenta.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><div class="ey a">Lighthouse · la herramienta de Google</div><h2 class="h w">Rápida, accesible <em>y lista para Google.</em></h2></div>
+    <div class="split" style="grid-template-columns:1.05fr .95fr;gap:36px;align-items:start">
+      <div class="hstack" style="gap:20px">
+        <div class="anillos chicos">
+          <div class="anillo a"><svg viewBox="0 0 200 200"><circle class="fa" cx="100" cy="100" r="85"/><circle class="val" cx="100" cy="100" r="85" style="--o:10.7"/><text x="100" y="100" data-n="98">98</text></svg><span class="nom">Rendimiento</span></div>
+          <div class="anillo a"><svg viewBox="0 0 200 200"><circle class="fa" cx="100" cy="100" r="85"/><circle class="val" cx="100" cy="100" r="85" style="--o:16"/><text x="100" y="100" data-n="97">97</text></svg><span class="nom">Accesibilidad</span></div>
+          <div class="anillo a"><svg viewBox="0 0 200 200"><circle class="fa" cx="100" cy="100" r="85"/><circle class="val" cx="100" cy="100" r="85" style="--o:0"/><text x="100" y="100" data-n="100">100</text></svg><span class="nom">Buenas prácticas</span></div>
+          <div class="anillo a"><svg viewBox="0 0 200 200"><circle class="fa" cx="100" cy="100" r="85"/><circle class="val" cx="100" cy="100" r="85" style="--o:0"/><text x="100" y="100" data-n="100">100</text></svg><span class="nom">SEO</span></div>
+        </div>
+        <div class="g3" style="gap:12px">
+          <div class="box blk" style="padding:16px 18px"><span class="lab">Celular primero</span><span class="tx" style="font-size:16px">Una columna, menú y barra fija «Reservar».</span></div>
+          <div class="box blk" style="padding:16px 18px"><span class="lab">Fotos en WebP</span><span class="tx" style="font-size:16px">La portada pasó de 11,5 MB a 1,3 MB.</span></div>
+          <div class="box blk" style="padding:16px 18px"><span class="lab">Un plugin por función</span><span class="tx" style="font-size:16px">Para que no se vuelva lenta.</span></div>
+        </div>
+      </div>
+      <figure class="sh a s" style="margin:0"><div style="aspect-ratio:auto"><img src="media/lighthouse.jpg" alt="Informe de Lighthouse del inicio del sitio: 98, 97, 100 y 100" style="height:auto;object-fit:contain"></div><figcaption>Informe real · inicio · escritorio</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv" data-b="5 · Web, SEO y Google" data-q="Ramiro" data-t="2:00" data-notes="Para el SEO: nadie busca «Selvara» todavía. Entonces cada página apunta a lo que la gente sí busca: «depilación definitiva en Rosario», «limpieza facial en Rosario». Y trabajamos el GEO: preguntas frecuentes con datos concretos, para que ChatGPT o Gemini nos nombren. Y antes que todo esto activamos Google Business, con el protocolo de reseñas: después de cada sesión le pedimos la reseña a cada cliente, sin dar nada a cambio, y respondemos todas. Web, Google y reseñas: así la confianza se convierte en turnos. ¿Y cómo sabemos que funcionó? Les cuenta Joaquín.">
+  <div class="cuerpo" style="gap:22px">
+    <div class="hstack"><div class="ey a">SEO, GEO y Google Business</div><h2 class="h w" style="font-size:62px">Nadie busca «Selvara». Buscan <em>el tratamiento + Rosario.</em></h2></div>
+    <div class="split" style="grid-template-columns:1.35fr 1fr;gap:36px;align-items:start">
+      <div>
+        <div class="kw a"><span class="kk">depilación definitiva rosario</span><span class="vol num">100 a 1.000/mes<i style="--w:45%"></i></span><span class="uso">Página de depilación</span></div>
+        <div class="kw a"><span class="kk">limpieza facial rosario</span><span class="vol num">100 a 1.000/mes<i style="--w:45%"></i></span><span class="uso">Página de faciales</span></div>
+        <div class="kw a"><span class="kk">depilación láser hombre</span><span class="vol num">100 a 1.000/mes<i style="--w:45%"></i></span><span class="uso">Página para hombres</span></div>
+        <div class="kw a"><span class="kk">masajes rosario</span><span class="vol num">1.000 a 10.000/mes<i style="--w:100%"></i></span><span class="uso">La más buscada</span></div>
+        <div class="kw a"><span class="kk">¿duele la depilación láser?</span><span class="vol num">100 a 1.000/mes<i style="--w:45%"></i></span><span class="uso">Preguntas frecuentes · GEO</span></div>
+        <p class="chico a" style="margin-top:12px">17 keywords medidas en el Planificador de Google Ads, una por página.</p>
+      </div>
+      <div class="hstack" style="gap:14px">
+        <div class="shot blk" style="height:250px"><img src="media/google.jpg" alt="Selvara en Google con su perfil de empresa" style="object-position:right top"><span>Google Business</span></div>
+        <div class="box blk oscura"><span class="lab">Protocolo de reseñas</span><span class="tx" style="font-size:18px">Después de cada sesión pedimos la reseña, sin dar nada a cambio, y respondemos todas.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 6 · RESULTADOS Y MEDICIÓN · Joaquín ===== -->
+<section class="slide selv" data-b="6 · Resultados y medición" data-q="Joaquín" data-t="2:00" data-notes="Medimos muchas cosas, pero a ustedes les reportamos dos: visitas y turnos. Visitas: en septiembre todavía no había web; en octubre, con la web lanzada, 1.720; en noviembre, 3.180. Turnos: partimos de 120 en septiembre y al cabo de noviembre estaba en 172. Es decir, un 43 % más, superando la meta de 40.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><span class="pill a">Simulación de cátedra</span><h2 class="h w">Los dos objetivos, <em>cumplidos.</em></h2></div>
+    <div class="g2" style="gap:40px">
+      <div class="hstack" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="lab a">Visitas por mes</span><span class="ok a">Meta cumplida</span></div>
+        <div class="graf a">
+          <div class="ref" style="bottom:calc(3000 / 3500 * 100%)">Meta 3.000</div>
+          <div class="col" style="--i:0"><span class="val sin">Todavía sin web</span><i style="--h:0%"></i></div>
+          <div class="col" style="--i:1"><span class="val num">1.720</span><i style="--h:49%"></i></div>
+          <div class="col fin" style="--i:2"><span class="val num" data-n="3180">3.180</span><i style="--h:90.9%"></i></div>
+        </div>
+        <div class="glab"><span>Sep</span><span>Oct</span><span>Nov</span></div>
+      </div>
+      <div class="hstack" style="gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="lab a">Turnos por mes · +43 %</span><span class="ok a">Meta superada</span></div>
+        <div class="graf a">
+          <div class="ref" style="bottom:calc(168 / 190 * 100%)">Meta 168</div>
+          <div class="ref base" style="bottom:calc(120 / 190 * 100%)">Base 120</div>
+          <div class="col" style="--i:0"><span class="val num">121</span><i style="--h:63.7%"></i></div>
+          <div class="col" style="--i:1"><span class="val num">146</span><i style="--h:76.8%"></i></div>
+          <div class="col fin" style="--i:2"><span class="val num" data-n="172">172</span><i style="--h:90.5%"></i></div>
+        </div>
+        <div class="glab"><span>Sep</span><span>Oct</span><span>Nov</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv" data-b="6 · Resultados y medición" data-q="Joaquín" data-t="2:00" data-notes="Pero no alcanza con saber que subió: hay que saber por qué. Los clientes nuevos pasaron de 9 a 52. Las reseñas, de 17 a 84. Las vistas en Google Maps superaron nuestras expectativas, y cada turno que trajo la publicidad pasó a costar 62 dólares. Esos indicadores nos dicen dónde está la falla si algo no avanza. Todo esto se los mandamos en un reporte mensual: qué funcionó y qué cambiamos. Y todo con 8.000 dólares; ahora les muestro cómo lo planeamos.">
+  <div class="cuerpo" style="gap:24px">
+    <div class="hstack"><span class="pill a">Simulación de cátedra</span><h2 class="h w">Por qué subió.</h2></div>
+    <div class="split" style="grid-template-columns:1.2fr .8fr;gap:30px;align-items:start">
+      <div class="g2" style="gap:14px">
+        <div class="box blk ind1"><span class="lab">Clientes nuevos</span><div class="de-a"><span class="d1 num">9</span><span class="d2 num" data-n="52">52</span></div><span class="chico">No crecimos solo con los de siempre.</span></div>
+        <div class="box blk oscura ind1"><span class="lab">Reseñas en Google</span><div class="de-a"><span class="d1 num">17</span><span class="d2 num" data-n="84">84</span></div><span class="chico">Con 4,9 de promedio.</span></div>
+        <div class="box blk ind1"><span class="lab">Vistas en Google Maps</span><div class="de-a"><span class="d2 num">+<span data-n="8000">8.000</span></span></div><span class="chico">Por mes: superaron las expectativas.</span></div>
+        <div class="box blk ind1"><span class="lab">Costo por turno de publicidad</span><div class="de-a"><span class="d1 num">USD 105</span><span class="d2 num">USD <span data-n="62">62</span></span></div><span class="chico">De octubre a noviembre.</span></div>
+      </div>
+      <div class="hstack" style="gap:10px"><img class="blk" src="media/reporte.jpg" alt="Modelo del reporte mensual de una página" style="width:100%;border-radius:14px;box-shadow:0 20px 44px rgba(47,74,60,.2)"><span class="chico a">Reporte mensual: qué funcionó y qué cambiamos.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 7 · PRESUPUESTO · Joaquín ===== -->
+<section class="slide selv" data-b="7 · Presupuesto" data-q="Joaquín" data-t="1:45" data-notes="Con los 8.000 dólares destinamos más de la mitad, 4.400, a la publicidad, porque el objetivo era atraer clientes nuevos y para eso hay que llegar a gente que hoy no los conoce. Nuestros honorarios son 2.800. Septiembre fue el lanzamiento: creamos la estructura digital de Selvara. Octubre fue el mes más fuerte, porque salió la web y creció la publicidad. Y noviembre lo usamos para escalar lo realizado. (Los montos de cada mes están en pantalla: no leerlos.) Primero la confianza, después la web y recién después la publicidad. Tiago les cuenta la conclusión.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><div class="ey a">Presupuesto · septiembre a noviembre de 2026</div><h2 class="h w">Cómo planeamos los 8.000 dólares.</h2></div>
+    <div class="presu">
+      <div class="dona a s">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" stroke="#2F4A3C" style="--l:241.9;stroke-dashoffset:0"/><circle cx="100" cy="100" r="70" stroke="#D8A99A" style="--l:153.9;stroke-dashoffset:-241.9"/><circle cx="100" cy="100" r="70" stroke="#B9AA9D" style="--l:26.5;stroke-dashoffset:-395.8"/><circle cx="100" cy="100" r="70" stroke="#4A5A3E" style="--l:17.5;stroke-dashoffset:-422.3"/></svg>
+        <div class="centro"><div class="tot num">USD <span data-n="8000">8.000</span></div><div class="per">El tope del plan</div></div>
+      </div>
+      <div class="hstack" style="gap:20px">
+        <div>
+          <div class="rubro a"><i style="background:#2F4A3C"></i><span>Publicidad<small>Para llegar a gente que hoy no los conoce</small></span><span class="m num">USD 4.400</span><span class="pc">55 %</span></div>
+          <div class="rubro a"><i style="background:#D8A99A"></i><span>Honorarios<small>280 horas del equipo a USD 10</small></span><span class="m num">USD 2.800</span><span class="pc">35 %</span></div>
+          <div class="rubro a"><i style="background:#B9AA9D"></i><span>Reserva<small>Solo se usa con su aprobación</small></span><span class="m num">USD 482</span><span class="pc">6 %</span></div>
+          <div class="rubro a"><i style="background:#4A5A3E"></i><span>Herramientas, hosting y dominio</span><span class="m num">USD 318</span><span class="pc">4 %</span></div>
+        </div>
+        <div class="cobro">
+          <div class="box blk"><span class="lab">Septiembre · lanzamiento</span><span class="bt num">1.633</span><span class="chico">Creamos la estructura digital.</span></div>
+          <div class="box blk oscura"><span class="lab">Octubre · el más fuerte</span><span class="bt num">3.088</span><span class="chico">Salió la web y creció la publicidad.</span></div>
+          <div class="box blk"><span class="lab">Noviembre · escalar</span><span class="bt num">2.797</span><span class="chico">Escalamos lo realizado.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 8 · CONCLUSIÓN · Tiago ===== -->
+<section class="slide selv deep" data-b="8 · Conclusión" data-q="Tiago" data-t="1:30" data-notes="En conclusión, Selvara pasó de no tener presencia digital a tenerla. Arrancó sin web, sin redes y sin una sola reseña. Hoy tiene una marca nueva, cuatro redes activas, una web donde se reserva en tres pasos y presencia en Google y en Maps. Y se cumplieron los dos objetivos: las visitas llegaron a 3.180 por mes, por encima de la meta de 3.000; los turnos pasaron de 120 a 172, un 43 % más, y con clientes nuevos: de 9 a 52. Todo con 8.000 dólares y un orden claro: primero la confianza, después la web y recién ahí la publicidad.">
+  <div class="cuerpo" style="gap:34px">
+    <div class="hstack"><div class="ey a">Conclusión</div><h2 class="h w">Selvara pasó de no tener presencia digital <em>a tenerla.</em></h2></div>
+    <div class="kpi3">
+      <div class="k3 a"><span class="lab">Visitas por mes</span><span class="kn num" data-n="3180">3.180</span><div class="kb"><i style="--w:100%"></i><em style="left:94%"></em></div><span class="kc">Meta 3.000 · superada</span></div>
+      <div class="k3 a"><span class="lab">Turnos en noviembre</span><span class="kn num">+<span data-n="43">43</span> %</span><div class="kb"><i style="--w:100%"></i><em style="left:93%"></em></div><span class="kc">De 120 a 172 · meta +40 %</span></div>
+      <div class="k3 a"><span class="lab">Clientes nuevos</span><span class="kn num" data-n="52">52</span><div class="kb"><i style="--w:100%"></i><em style="left:17%"></em></div><span class="kc">Venían de 9</span></div>
+    </div>
+    <div class="camino3 a">
+      <div><span class="nn">1</span><b>Confianza</b></div><span class="fl3">→</span>
+      <div><span class="nn">2</span><b>La web</b></div><span class="fl3">→</span>
+      <div><span class="nn">3</span><b>La publicidad</b></div>
+      <span class="con">Con USD 8.000 y ese orden.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 9 · FUTURO · Ramiro ===== -->
+<section class="slide selv" data-b="9 · Pasos a futuro" data-q="Ramiro" data-t="2:00" data-notes="Cumplimos los dos objetivos, pero también sabemos qué haríamos distinto. Lo primero: lanzaríamos la web antes; en septiembre la gente ya nos conocía por las redes, pero no tenía dónde reservar. Lo segundo: hoy 2,5 de cada cien visitas reservan; el próximo paso es que reserven más de las que ya llegan. Lo tercero: darle más lugar a YouTube, la red que más rindió por publicación, con el 96 % de las vistas en Shorts: más Shorts y videos que respondan las dudas de quien está por decidir. Y lo cuarto: seguir sumando reseñas, que es lo que sostiene todo lo demás.">
+  <div class="cuerpo" style="gap:26px">
+    <div class="hstack"><div class="ey a">Qué haríamos distinto</div><h2 class="h w">Cumplimos. <em>Y sabemos qué mejorar.</em></h2></div>
+    <div class="g2" style="gap:16px">
+      <div class="box blk fut"><span class="nn">1</span><div><span class="lab">La web, antes</span><span class="bt">Lanzarla en septiembre.</span><span class="chico">Ya nos conocían por las redes, pero no había dónde reservar.</span></div></div>
+      <div class="box blk fut"><span class="nn">2</span><div><span class="lab">Que reserven más</span><span class="bt"><span class="num" data-n="2.5" data-dec="1">2,5</span> de cada 100 visitas reservan.</span><span class="chico">Que reserven más de las que ya llegan.</span></div></div>
+      <div class="box blk fut oscura"><span class="nn">3</span><div><span class="lab">Más YouTube</span><span class="bt">La red que más rindió por publicación.</span><span class="chico">El 96 % de las vistas vino de los Shorts: más Shorts y videos que respondan dudas.</span></div></div>
+      <div class="box blk fut"><span class="nn">4</span><div><span class="lab">Más reseñas</span><span class="bt">Lo que sostiene todo lo demás.</span><span class="chico">Seguir pidiéndolas después de cada sesión.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv sinmarca" data-b="9 · Pasos a futuro" data-q="Ramiro" data-t="2:00" data-notes="En esta segunda etapa queremos proponer un asistente con inteligencia artificial en WhatsApp que responda a cualquier hora y mande los recordatorios, siempre con la opción de hablar con una persona o un profesional de Selvara. Y les dejamos una propuesta aparte, fuera de estos 8.000 dólares.">
+  <div class="cuerpo">
+    <div class="split" style="grid-template-columns:1fr 520px;gap:60px">
+      <div class="hstack" style="gap:22px">
+        <span class="pill a">Segunda etapa</span>
+        <h2 class="h w" style="font-size:84px">Un asistente con IA <em>en WhatsApp.</em></h2>
+        <div class="check">
+          <div class="a">Responde a cualquier hora, aunque el local esté cerrado.</div>
+          <div class="a">Manda los recordatorios antes de cada turno.</div>
+          <div class="a">Siempre con la opción de hablar con una persona o un profesional de Selvara.</div>
+        </div>
+      </div>
+      <div class="chat a r">
+        <div class="ch-top"><svg class="ico-wa"><use href="#i-wa"/></svg><div><b>Selvara</b><span>asistente · en línea</span></div></div>
+        <div class="ch-body">
+          <div class="msg yo" style="--k:0">Hola! ¿Tienen turno el sábado para depilación?<i>23:47</i></div>
+          <div class="msg bot" style="--k:1">¡Hola! Sí: el sábado tenemos 10:30 o 12:00. ¿Te reservo alguno?<i>23:47</i></div>
+          <div class="msg yo" style="--k:2">10:30 💚<i>23:48</i></div>
+          <div class="msg bot" style="--k:3">Listo ✓ Te esperamos el sábado a las 10:30. El viernes te mando un recordatorio.<i>23:48</i></div>
+          <div class="msg sis" style="--k:4">¿Preferís hablar con una persona? Escribí «persona».</div>
+        </div>
+        <span class="ch-pie">Ejemplo ilustrativo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide selv sinmarca" data-b="9 · Pasos a futuro" data-q="Ramiro" data-t="2:00" data-notes="Pasar el video de la app con el botón. Después: «Esta aplicación está pensada para fidelizar a nuestros clientes después de la primera sesión y captar nuevos con nuestra estrategia de innovación. Muchas gracias por mirar.»">
+  <div class="cuerpo">
+    <div class="split" style="grid-template-columns:1fr 560px;gap:56px">
+      <div class="hstack" style="gap:20px">
+        <span class="pill n a">Propuesta creativa · fuera de los USD 8.000</span>
+        <h2 class="h xl w" style="font-size:104px">Selvara <em>App</em></h2>
+        <p class="tx a" style="font-size:26px">Pensada para <b>fidelizar</b> a los clientes después de la primera sesión y <b>captar nuevos</b> con nuestra estrategia de innovación.</p>
+        <div class="app4">
+          <div class="a"><span class="nn">01</span><b>Mi plan</b><span>Sesión 3 de 6 y cuándo toca la próxima.</span></div>
+          <div class="a"><span class="nn">02</span><b>Reservar</b><span>Y reprogramar con un toque.</span></div>
+          <div class="a"><span class="nn">03</span><b>Recordatorios</b><span>Para no olvidarse del turno.</span></div>
+          <div class="a"><span class="nn">04</span><b>Reseñas</b><span>Después de cada sesión.</span></div>
+        </div>
+      </div>
+      <div class="app-panel a s"><div class="video-a vertical"><video src="media/app-sonido.mp4" poster="media/app-poster.jpg" playsinline preload="metadata"></video><button class="play" type="button"><span>▶ Ver la app</span></button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CIERRE · AISLE ===== -->
+<section class="slide aisle" data-b="Cierre" data-q="Ramiro" data-t="" data-notes="Muchas gracias por mirar. Estamos para sus preguntas.">
+  <div class="cuerpo" style="gap:36px;align-items:flex-start">
+    <div class="a s" style="width:620px"><svg class="alogo" viewBox="0 0 549 209" aria-label="Aisle Agency"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/><path fill="var(--al-texto)" fill-rule="nonzero" d="M244.12 40.55C249.74 40.55 254.66 41.69 258.90 43.98C263.13 46.26 266.39 49.26 268.68 52.97C268.68 52.97 268.68 41.69 268.68 41.69C268.68 41.69 293.09 41.69 293.09 41.69C293.09 41.69 293.09 121.36 293.09 121.36C293.09 121.36 268.68 121.36 268.68 121.36C268.68 121.36 268.68 110.08 268.68 110.08C266.30 113.79 262.99 116.79 258.75 119.07C254.52 121.36 249.59 122.50 243.98 122.50C237.51 122.50 231.61 120.81 226.27 117.43C220.94 114.05 216.73 109.25 213.64 103.01C210.55 96.78 209.00 89.57 209.00 81.38C209.00 73.20 210.55 66.01 213.64 59.82C216.73 53.64 220.94 48.88 226.27 45.55C231.61 42.22 237.55 40.55 244.12 40.55ZM251.26 61.82C246.40 61.82 242.29 63.56 238.91 67.03C235.53 70.51 233.84 75.29 233.84 81.38C233.84 87.47 235.53 92.30 238.91 95.87C242.29 99.44 246.40 101.23 251.26 101.23C256.11 101.23 260.23 99.47 263.61 95.94C266.99 92.42 268.68 87.62 268.68 81.53C268.68 75.43 266.99 70.63 263.61 67.11C260.23 63.58 256.11 61.82 251.26 61.82ZM306.69 20.28C306.69 16.47 308.04 13.31 310.76 10.78C313.47 8.26 316.97 7.00 321.25 7.00C325.44 7.00 328.89 8.26 331.60 10.78C334.31 13.31 335.67 16.47 335.67 20.28C335.67 23.99 334.31 27.11 331.60 29.63C328.89 32.15 325.44 33.41 321.25 33.41C316.97 33.41 313.47 32.15 310.76 29.63C308.04 27.11 306.69 23.99 306.69 20.28ZM333.38 41.69C333.38 41.69 333.38 121.36 333.38 121.36C333.38 121.36 308.97 121.36 308.97 121.36C308.97 121.36 308.97 41.69 308.97 41.69ZM344.98 95.23C344.98 95.23 369.11 95.23 369.11 95.23C369.40 97.99 370.68 100.23 372.97 101.94C375.25 103.66 378.06 104.51 381.39 104.51C384.44 104.51 386.79 103.92 388.46 102.73C390.12 101.54 390.95 99.99 390.95 98.09C390.95 95.80 389.76 94.11 387.39 93.02C385.01 91.92 381.15 90.71 375.82 89.38C370.11 88.04 365.35 86.64 361.54 85.17C357.74 83.69 354.45 81.36 351.69 78.17C348.93 74.98 347.55 70.68 347.55 65.25C347.55 60.68 348.81 56.52 351.34 52.76C353.86 49.00 357.57 46.02 362.47 43.83C367.37 41.65 373.20 40.55 379.96 40.55C389.96 40.55 397.83 43.03 403.59 47.97C409.35 52.92 412.66 59.49 413.51 67.68C413.51 67.68 390.95 67.68 390.95 67.68C390.57 64.92 389.36 62.73 387.31 61.11C385.27 59.49 382.58 58.68 379.25 58.68C376.39 58.68 374.20 59.23 372.68 60.32C371.16 61.42 370.40 62.92 370.40 64.82C370.40 67.11 371.61 68.82 374.04 69.96C376.46 71.10 380.25 72.25 385.39 73.39C391.29 74.91 396.10 76.41 399.81 77.88C403.52 79.36 406.78 81.74 409.59 85.02C412.39 88.31 413.85 92.71 413.94 98.23C413.94 102.89 412.63 107.06 410.01 110.72C407.40 114.39 403.64 117.26 398.74 119.36C393.83 121.45 388.15 122.50 381.68 122.50C374.73 122.50 368.54 121.31 363.12 118.93C357.69 116.55 353.41 113.29 350.27 109.15C347.12 105.01 345.36 100.37 344.98 95.23ZM451.52 15.71C451.52 15.71 451.52 121.36 451.52 121.36C451.52 121.36 427.11 121.36 427.11 121.36C427.11 121.36 427.11 15.71 427.11 15.71ZM542.07 87.38C542.07 87.38 486.82 87.38 486.82 87.38C487.20 92.33 488.79 96.11 491.60 98.73C494.41 101.35 497.86 102.66 501.95 102.66C508.04 102.66 512.28 100.09 514.66 94.95C514.66 94.95 540.64 94.95 540.64 94.95C539.31 100.18 536.91 104.89 533.43 109.08C529.96 113.27 525.61 116.55 520.37 118.93C515.14 121.31 509.28 122.50 502.81 122.50C495.01 122.50 488.06 120.83 481.97 117.50C475.88 114.17 471.12 109.41 467.69 103.23C464.26 97.04 462.55 89.81 462.55 81.53C462.55 73.25 464.24 66.01 467.62 59.82C471.00 53.64 475.73 48.88 481.82 45.55C487.91 42.22 494.91 40.55 502.81 40.55C510.52 40.55 517.37 42.17 523.37 45.41C529.37 48.64 534.05 53.26 537.43 59.25C540.81 65.25 542.50 72.25 542.50 80.24C542.50 82.53 542.36 84.90 542.07 87.38ZM517.51 73.82C517.51 69.63 516.09 66.30 513.23 63.82C510.38 61.35 506.81 60.11 502.52 60.11C498.43 60.11 494.98 61.30 492.17 63.68C489.37 66.06 487.63 69.44 486.96 73.82Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M256.78 151.00C259.41 151.00 261.71 151.52 263.67 152.55C265.63 153.58 267.20 154.86 268.37 156.40C268.37 156.40 268.37 151.55 268.37 151.55C268.37 151.55 275.36 151.55 275.36 151.55C275.36 151.55 275.36 184.99 275.36 184.99C275.36 184.99 268.37 184.99 268.37 184.99C268.37 184.99 268.37 180.01 268.37 180.01C267.20 181.59 265.60 182.91 263.58 183.96C261.56 185.01 259.25 185.54 256.66 185.54C253.79 185.54 251.16 184.80 248.77 183.32C246.38 181.84 244.49 179.78 243.09 177.13C241.70 174.48 241.00 171.48 241.00 168.12C241.00 164.76 241.70 161.78 243.09 159.19C244.49 156.60 246.39 154.59 248.80 153.15C251.21 151.72 253.87 151.00 256.78 151.00ZM258.24 157.01C256.46 157.01 254.80 157.44 253.26 158.31C251.72 159.18 250.48 160.46 249.53 162.14C248.58 163.82 248.10 165.81 248.10 168.12C248.10 170.42 248.58 172.45 249.53 174.19C250.48 175.93 251.73 177.25 253.29 178.16C254.85 179.07 256.50 179.53 258.24 179.53C260.02 179.53 261.68 179.08 263.21 178.19C264.75 177.30 266.00 176.00 266.95 174.28C267.90 172.56 268.37 170.54 268.37 168.24C268.37 165.93 267.90 163.93 266.95 162.23C266.00 160.53 264.75 159.24 263.21 158.34C261.68 157.45 260.02 157.01 258.24 157.01ZM320.03 156.40C320.03 156.40 320.03 151.55 320.03 151.55C320.03 151.55 327.01 151.55 327.01 151.55C327.01 151.55 327.01 185.54 327.01 185.54C327.01 188.61 326.36 191.35 325.07 193.76C323.77 196.17 321.90 198.06 319.45 199.44C317.01 200.81 314.08 201.50 310.68 201.50C306.15 201.50 302.39 200.44 299.39 198.31C296.40 196.19 294.70 193.31 294.30 189.66C294.30 189.66 301.15 189.66 301.15 189.66C301.68 191.40 302.80 192.81 304.52 193.88C306.24 194.95 308.30 195.49 310.68 195.49C313.48 195.49 315.73 194.64 317.45 192.94C319.17 191.24 320.03 188.77 320.03 185.54C320.03 185.54 320.03 179.95 320.03 179.95C318.86 181.53 317.27 182.86 315.27 183.93C313.26 185.00 310.99 185.54 308.44 185.54C305.52 185.54 302.86 184.80 300.46 183.32C298.05 181.84 296.15 179.78 294.75 177.13C293.36 174.48 292.66 171.48 292.66 168.12C292.66 164.76 293.36 161.78 294.75 159.19C296.15 156.60 298.05 154.59 300.46 153.15C302.86 151.72 305.52 151.00 308.44 151.00C311.03 151.00 313.32 151.52 315.33 152.55C317.33 153.58 318.90 154.86 320.03 156.40ZM309.89 157.01C308.12 157.01 306.45 157.44 304.92 158.31C303.38 159.18 302.14 160.46 301.19 162.14C300.23 163.82 299.76 165.81 299.76 168.12C299.76 170.42 300.23 172.45 301.19 174.19C302.14 175.93 303.39 177.25 304.95 178.16C306.51 179.07 308.15 179.53 309.89 179.53C311.68 179.53 313.33 179.08 314.87 178.19C316.41 177.30 317.65 176.00 318.61 174.28C319.56 172.56 320.03 170.54 320.03 168.24C320.03 165.93 319.56 163.93 318.61 162.23C317.65 160.53 316.41 159.24 314.87 158.34C313.33 157.45 311.68 157.01 309.89 157.01ZM377.03 170.85C377.03 170.85 351.48 170.85 351.48 170.85C351.68 173.52 352.67 175.66 354.45 177.28C356.23 178.90 358.42 179.71 361.01 179.71C364.73 179.71 367.36 178.15 368.90 175.04C368.90 175.04 376.36 175.04 376.36 175.04C375.35 178.11 373.52 180.63 370.87 182.59C368.22 184.56 364.93 185.54 361.01 185.54C357.81 185.54 354.95 184.82 352.42 183.38C349.89 181.94 347.90 179.92 346.47 177.31C345.03 174.70 344.31 171.68 344.31 168.24C344.31 164.80 345.01 161.77 346.41 159.16C347.80 156.55 349.77 154.54 352.30 153.12C354.82 151.71 357.73 151.00 361.01 151.00C364.16 151.00 366.97 151.69 369.44 153.06C371.91 154.44 373.83 156.37 375.21 158.86C376.58 161.35 377.27 164.21 377.27 167.45C377.27 168.70 377.19 169.84 377.03 170.85ZM370.05 165.26C370.01 162.71 369.10 160.67 367.32 159.13C365.54 157.60 363.33 156.83 360.70 156.83C358.31 156.83 356.27 157.59 354.57 159.10C352.87 160.62 351.86 162.67 351.54 165.26ZM425.17 165.26C425.17 165.26 425.17 184.99 425.17 184.99C425.17 184.99 418.31 184.99 418.31 184.99C418.31 184.99 418.31 166.30 418.31 166.30C418.31 163.30 417.56 161.00 416.06 159.41C414.56 157.81 412.52 157.01 409.93 157.01C407.34 157.01 405.29 157.81 403.77 159.41C402.25 161.00 401.49 163.30 401.49 166.30C401.49 166.30 401.49 184.99 401.49 184.99C401.49 184.99 394.57 184.99 394.57 184.99C394.57 184.99 394.57 151.55 394.57 151.55C394.57 151.55 401.49 151.55 401.49 151.55C401.49 151.55 401.49 155.37 401.49 155.37C402.63 153.99 404.07 152.92 405.83 152.15C407.59 151.38 409.47 151.00 411.45 151.00C414.08 151.00 416.44 151.55 418.52 152.64C420.60 153.73 422.23 155.35 423.41 157.50C424.58 159.64 425.17 162.23 425.17 165.26ZM458.55 151.00C462.60 151.00 465.95 151.96 468.60 153.88C471.25 155.81 473.04 158.55 473.97 162.11C473.97 162.11 466.50 162.11 466.50 162.11C465.90 160.45 464.93 159.15 463.59 158.22C462.26 157.29 460.58 156.83 458.55 156.83C455.72 156.83 453.47 157.83 451.79 159.83C450.11 161.83 449.27 164.64 449.27 168.24C449.27 171.84 450.11 174.65 451.79 176.68C453.47 178.70 455.72 179.71 458.55 179.71C462.56 179.71 465.21 177.95 466.50 174.43C466.50 174.43 473.97 174.43 473.97 174.43C473.00 177.83 471.18 180.53 468.51 182.53C465.84 184.54 462.52 185.54 458.55 185.54C455.36 185.54 452.52 184.82 450.06 183.38C447.59 181.94 445.65 179.92 444.26 177.31C442.86 174.70 442.16 171.68 442.16 168.24C442.16 164.80 442.86 161.77 444.26 159.16C445.65 156.55 447.59 154.54 450.06 153.12C452.52 151.71 455.36 151.00 458.55 151.00ZM521.50 151.55C521.50 151.55 500.98 200.71 500.98 200.71C500.98 200.71 493.82 200.71 493.82 200.71C493.82 200.71 500.62 184.44 500.62 184.44C500.62 184.44 487.45 151.55 487.45 151.55C487.45 151.55 495.16 151.55 495.16 151.55C495.16 151.55 504.57 177.04 504.57 177.04C504.57 177.04 514.34 151.55 514.34 151.55Z"/></svg></div>
+    <h1 class="t1 w" style="font-size:120px">Muchas gracias. <span class="v">¿Preguntas?</span></h1>
+    <p class="lead a">Tiago Cabral · Lautaro Di Virgilio · Joaquín Zacskek · Ramiro Della Torre</p>
+  </div>
+</section>
+
+<div class="barrido" id="barrido"></div>
+</div>
+
+<template id="logoTpl"><svg class="alogo" viewBox="0 0 549 209" aria-label="Aisle Agency"><path fill="var(--al-osc)" fill-rule="nonzero" d="M77.29 17.96C77.96 16.33 79.94 15.00 81.70 15.00C81.70 15.00 114.80 15.00 114.80 15.00C116.56 15.00 117.47 16.34 116.82 17.97C116.82 17.97 52.18 180.53 52.18 180.53C51.53 182.16 49.58 183.73 47.84 184.00C47.84 184.00 10.16 190.00 10.16 190.00C8.42 190.27 7.54 189.17 8.21 187.54C8.21 187.54 77.29 17.96 77.29 17.96Z"/><path fill="var(--al-claro)" fill-rule="nonzero" d="M133.77 19.45C134.45 17.83 136.44 16.50 138.20 16.50C138.20 16.50 164.80 16.50 164.80 16.50C166.56 16.50 167.46 17.83 166.80 19.47C166.80 19.47 111.70 155.53 111.70 155.53C111.04 157.17 109.18 159.07 107.57 159.78C107.57 159.78 70.93 175.72 70.93 175.72C69.32 176.43 68.55 175.67 69.23 174.05C69.23 174.05 133.77 19.45 133.77 19.45Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M161.29 72.96C161.96 71.33 163.04 71.33 163.71 72.96C163.71 72.96 210.29 187.04 210.29 187.04C210.96 188.67 210.07 189.88 208.31 189.73C208.31 189.73 167.69 186.27 167.69 186.27C165.93 186.12 163.92 184.68 163.22 183.07C163.22 183.07 140.28 130.43 140.28 130.43C139.58 128.82 139.54 126.17 140.21 124.54C140.21 124.54 161.29 72.96 161.29 72.96Z"/><path fill="var(--al-texto)" fill-rule="nonzero" d="M244.12 40.55C249.74 40.55 254.66 41.69 258.90 43.98C263.13 46.26 266.39 49.26 268.68 52.97C268.68 52.97 268.68 41.69 268.68 41.69C268.68 41.69 293.09 41.69 293.09 41.69C293.09 41.69 293.09 121.36 293.09 121.36C293.09 121.36 268.68 121.36 268.68 121.36C268.68 121.36 268.68 110.08 268.68 110.08C266.30 113.79 262.99 116.79 258.75 119.07C254.52 121.36 249.59 122.50 243.98 122.50C237.51 122.50 231.61 120.81 226.27 117.43C220.94 114.05 216.73 109.25 213.64 103.01C210.55 96.78 209.00 89.57 209.00 81.38C209.00 73.20 210.55 66.01 213.64 59.82C216.73 53.64 220.94 48.88 226.27 45.55C231.61 42.22 237.55 40.55 244.12 40.55ZM251.26 61.82C246.40 61.82 242.29 63.56 238.91 67.03C235.53 70.51 233.84 75.29 233.84 81.38C233.84 87.47 235.53 92.30 238.91 95.87C242.29 99.44 246.40 101.23 251.26 101.23C256.11 101.23 260.23 99.47 263.61 95.94C266.99 92.42 268.68 87.62 268.68 81.53C268.68 75.43 266.99 70.63 263.61 67.11C260.23 63.58 256.11 61.82 251.26 61.82ZM306.69 20.28C306.69 16.47 308.04 13.31 310.76 10.78C313.47 8.26 316.97 7.00 321.25 7.00C325.44 7.00 328.89 8.26 331.60 10.78C334.31 13.31 335.67 16.47 335.67 20.28C335.67 23.99 334.31 27.11 331.60 29.63C328.89 32.15 325.44 33.41 321.25 33.41C316.97 33.41 313.47 32.15 310.76 29.63C308.04 27.11 306.69 23.99 306.69 20.28ZM333.38 41.69C333.38 41.69 333.38 121.36 333.38 121.36C333.38 121.36 308.97 121.36 308.97 121.36C308.97 121.36 308.97 41.69 308.97 41.69ZM344.98 95.23C344.98 95.23 369.11 95.23 369.11 95.23C369.40 97.99 370.68 100.23 372.97 101.94C375.25 103.66 378.06 104.51 381.39 104.51C384.44 104.51 386.79 103.92 388.46 102.73C390.12 101.54 390.95 99.99 390.95 98.09C390.95 95.80 389.76 94.11 387.39 93.02C385.01 91.92 381.15 90.71 375.82 89.38C370.11 88.04 365.35 86.64 361.54 85.17C357.74 83.69 354.45 81.36 351.69 78.17C348.93 74.98 347.55 70.68 347.55 65.25C347.55 60.68 348.81 56.52 351.34 52.76C353.86 49.00 357.57 46.02 362.47 43.83C367.37 41.65 373.20 40.55 379.96 40.55C389.96 40.55 397.83 43.03 403.59 47.97C409.35 52.92 412.66 59.49 413.51 67.68C413.51 67.68 390.95 67.68 390.95 67.68C390.57 64.92 389.36 62.73 387.31 61.11C385.27 59.49 382.58 58.68 379.25 58.68C376.39 58.68 374.20 59.23 372.68 60.32C371.16 61.42 370.40 62.92 370.40 64.82C370.40 67.11 371.61 68.82 374.04 69.96C376.46 71.10 380.25 72.25 385.39 73.39C391.29 74.91 396.10 76.41 399.81 77.88C403.52 79.36 406.78 81.74 409.59 85.02C412.39 88.31 413.85 92.71 413.94 98.23C413.94 102.89 412.63 107.06 410.01 110.72C407.40 114.39 403.64 117.26 398.74 119.36C393.83 121.45 388.15 122.50 381.68 122.50C374.73 122.50 368.54 121.31 363.12 118.93C357.69 116.55 353.41 113.29 350.27 109.15C347.12 105.01 345.36 100.37 344.98 95.23ZM451.52 15.71C451.52 15.71 451.52 121.36 451.52 121.36C451.52 121.36 427.11 121.36 427.11 121.36C427.11 121.36 427.11 15.71 427.11 15.71ZM542.07 87.38C542.07 87.38 486.82 87.38 486.82 87.38C487.20 92.33 488.79 96.11 491.60 98.73C494.41 101.35 497.86 102.66 501.95 102.66C508.04 102.66 512.28 100.09 514.66 94.95C514.66 94.95 540.64 94.95 540.64 94.95C539.31 100.18 536.91 104.89 533.43 109.08C529.96 113.27 525.61 116.55 520.37 118.93C515.14 121.31 509.28 122.50 502.81 122.50C495.01 122.50 488.06 120.83 481.97 117.50C475.88 114.17 471.12 109.41 467.69 103.23C464.26 97.04 462.55 89.81 462.55 81.53C462.55 73.25 464.24 66.01 467.62 59.82C471.00 53.64 475.73 48.88 481.82 45.55C487.91 42.22 494.91 40.55 502.81 40.55C510.52 40.55 517.37 42.17 523.37 45.41C529.37 48.64 534.05 53.26 537.43 59.25C540.81 65.25 542.50 72.25 542.50 80.24C542.50 82.53 542.36 84.90 542.07 87.38ZM517.51 73.82C517.51 69.63 516.09 66.30 513.23 63.82C510.38 61.35 506.81 60.11 502.52 60.11C498.43 60.11 494.98 61.30 492.17 63.68C489.37 66.06 487.63 69.44 486.96 73.82Z"/><path fill="var(--al-osc)" fill-rule="nonzero" d="M256.78 151.00C259.41 151.00 261.71 151.52 263.67 152.55C265.63 153.58 267.20 154.86 268.37 156.40C268.37 156.40 268.37 151.55 268.37 151.55C268.37 151.55 275.36 151.55 275.36 151.55C275.36 151.55 275.36 184.99 275.36 184.99C275.36 184.99 268.37 184.99 268.37 184.99C268.37 184.99 268.37 180.01 268.37 180.01C267.20 181.59 265.60 182.91 263.58 183.96C261.56 185.01 259.25 185.54 256.66 185.54C253.79 185.54 251.16 184.80 248.77 183.32C246.38 181.84 244.49 179.78 243.09 177.13C241.70 174.48 241.00 171.48 241.00 168.12C241.00 164.76 241.70 161.78 243.09 159.19C244.49 156.60 246.39 154.59 248.80 153.15C251.21 151.72 253.87 151.00 256.78 151.00ZM258.24 157.01C256.46 157.01 254.80 157.44 253.26 158.31C251.72 159.18 250.48 160.46 249.53 162.14C248.58 163.82 248.10 165.81 248.10 168.12C248.10 170.42 248.58 172.45 249.53 174.19C250.48 175.93 251.73 177.25 253.29 178.16C254.85 179.07 256.50 179.53 258.24 179.53C260.02 179.53 261.68 179.08 263.21 178.19C264.75 177.30 266.00 176.00 266.95 174.28C267.90 172.56 268.37 170.54 268.37 168.24C268.37 165.93 267.90 163.93 266.95 162.23C266.00 160.53 264.75 159.24 263.21 158.34C261.68 157.45 260.02 157.01 258.24 157.01ZM320.03 156.40C320.03 156.40 320.03 151.55 320.03 151.55C320.03 151.55 327.01 151.55 327.01 151.55C327.01 151.55 327.01 185.54 327.01 185.54C327.01 188.61 326.36 191.35 325.07 193.76C323.77 196.17 321.90 198.06 319.45 199.44C317.01 200.81 314.08 201.50 310.68 201.50C306.15 201.50 302.39 200.44 299.39 198.31C296.40 196.19 294.70 193.31 294.30 189.66C294.30 189.66 301.15 189.66 301.15 189.66C301.68 191.40 302.80 192.81 304.52 193.88C306.24 194.95 308.30 195.49 310.68 195.49C313.48 195.49 315.73 194.64 317.45 192.94C319.17 191.24 320.03 188.77 320.03 185.54C320.03 185.54 320.03 179.95 320.03 179.95C318.86 181.53 317.27 182.86 315.27 183.93C313.26 185.00 310.99 185.54 308.44 185.54C305.52 185.54 302.86 184.80 300.46 183.32C298.05 181.84 296.15 179.78 294.75 177.13C293.36 174.48 292.66 171.48 292.66 168.12C292.66 164.76 293.36 161.78 294.75 159.19C296.15 156.60 298.05 154.59 300.46 153.15C302.86 151.72 305.52 151.00 308.44 151.00C311.03 151.00 313.32 151.52 315.33 152.55C317.33 153.58 318.90 154.86 320.03 156.40ZM309.89 157.01C308.12 157.01 306.45 157.44 304.92 158.31C303.38 159.18 302.14 160.46 301.19 162.14C300.23 163.82 299.76 165.81 299.76 168.12C299.76 170.42 300.23 172.45 301.19 174.19C302.14 175.93 303.39 177.25 304.95 178.16C306.51 179.07 308.15 179.53 309.89 179.53C311.68 179.53 313.33 179.08 314.87 178.19C316.41 177.30 317.65 176.00 318.61 174.28C319.56 172.56 320.03 170.54 320.03 168.24C320.03 165.93 319.56 163.93 318.61 162.23C317.65 160.53 316.41 159.24 314.87 158.34C313.33 157.45 311.68 157.01 309.89 157.01ZM377.03 170.85C377.03 170.85 351.48 170.85 351.48 170.85C351.68 173.52 352.67 175.66 354.45 177.28C356.23 178.90 358.42 179.71 361.01 179.71C364.73 179.71 367.36 178.15 368.90 175.04C368.90 175.04 376.36 175.04 376.36 175.04C375.35 178.11 373.52 180.63 370.87 182.59C368.22 184.56 364.93 185.54 361.01 185.54C357.81 185.54 354.95 184.82 352.42 183.38C349.89 181.94 347.90 179.92 346.47 177.31C345.03 174.70 344.31 171.68 344.31 168.24C344.31 164.80 345.01 161.77 346.41 159.16C347.80 156.55 349.77 154.54 352.30 153.12C354.82 151.71 357.73 151.00 361.01 151.00C364.16 151.00 366.97 151.69 369.44 153.06C371.91 154.44 373.83 156.37 375.21 158.86C376.58 161.35 377.27 164.21 377.27 167.45C377.27 168.70 377.19 169.84 377.03 170.85ZM370.05 165.26C370.01 162.71 369.10 160.67 367.32 159.13C365.54 157.60 363.33 156.83 360.70 156.83C358.31 156.83 356.27 157.59 354.57 159.10C352.87 160.62 351.86 162.67 351.54 165.26ZM425.17 165.26C425.17 165.26 425.17 184.99 425.17 184.99C425.17 184.99 418.31 184.99 418.31 184.99C418.31 184.99 418.31 166.30 418.31 166.30C418.31 163.30 417.56 161.00 416.06 159.41C414.56 157.81 412.52 157.01 409.93 157.01C407.34 157.01 405.29 157.81 403.77 159.41C402.25 161.00 401.49 163.30 401.49 166.30C401.49 166.30 401.49 184.99 401.49 184.99C401.49 184.99 394.57 184.99 394.57 184.99C394.57 184.99 394.57 151.55 394.57 151.55C394.57 151.55 401.49 151.55 401.49 151.55C401.49 151.55 401.49 155.37 401.49 155.37C402.63 153.99 404.07 152.92 405.83 152.15C407.59 151.38 409.47 151.00 411.45 151.00C414.08 151.00 416.44 151.55 418.52 152.64C420.60 153.73 422.23 155.35 423.41 157.50C424.58 159.64 425.17 162.23 425.17 165.26ZM458.55 151.00C462.60 151.00 465.95 151.96 468.60 153.88C471.25 155.81 473.04 158.55 473.97 162.11C473.97 162.11 466.50 162.11 466.50 162.11C465.90 160.45 464.93 159.15 463.59 158.22C462.26 157.29 460.58 156.83 458.55 156.83C455.72 156.83 453.47 157.83 451.79 159.83C450.11 161.83 449.27 164.64 449.27 168.24C449.27 171.84 450.11 174.65 451.79 176.68C453.47 178.70 455.72 179.71 458.55 179.71C462.56 179.71 465.21 177.95 466.50 174.43C466.50 174.43 473.97 174.43 473.97 174.43C473.00 177.83 471.18 180.53 468.51 182.53C465.84 184.54 462.52 185.54 458.55 185.54C455.36 185.54 452.52 184.82 450.06 183.38C447.59 181.94 445.65 179.92 444.26 177.31C442.86 174.70 442.16 171.68 442.16 168.24C442.16 164.80 442.86 161.77 444.26 159.16C445.65 156.55 447.59 154.54 450.06 153.12C452.52 151.71 455.36 151.00 458.55 151.00ZM521.50 151.55C521.50 151.55 500.98 200.71 500.98 200.71C500.98 200.71 493.82 200.71 493.82 200.71C493.82 200.71 500.62 184.44 500.62 184.44C500.62 184.44 487.45 151.55 487.45 151.55C487.45 151.55 495.16 151.55 495.16 151.55C495.16 151.55 504.57 177.04 504.57 177.04C504.57 177.04 514.34 151.55 514.34 151.55Z"/></svg></template>
+<div class="prog" id="prog" aria-hidden="true"></div>
+<div class="notas" id="notas" hidden><h5 id="notasT"></h5><div id="notasX"></div></div>
+<div class="ix" id="ix" hidden><button class="cerrar" id="ixCerrar" type="button">Cerrar · Esc</button><div class="in" id="ixIn"></div><p class="ayuda">← → avanzar · O índice · N notas · T cronómetro · F pantalla completa</p></div>
+<nav class="ui" id="ui" aria-label="Controles de la presentación">
+  <button type="button" id="bPrev" aria-label="Anterior">←</button>
+  <button type="button" id="bNext" aria-label="Siguiente">→</button>
+  <span class="info" id="info"></span>
+  <span class="reloj num" id="reloj">00:00</span>
+  <button type="button" id="bT">T · Cronómetro</button>
+  <button type="button" id="bN">N · Notas</button>
+  <button type="button" id="bO">O · Índice</button>
+  <button type="button" id="bF">F · Pantalla</button>
+</nav>
+
+<script>
+(function () {
+  var S = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage = document.getElementById('stage'), barrido = document.getElementById('barrido');
+  var cur = -1, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ISO_S = '<svg class="iso" viewBox="-10 -10 350 290"><g><path class="h" d="M164.26 261C79.21 239.52-1.76 140.38 0 51 87.17 70.82 163.9 173.28 164.26 261Z"/><path class="h" d="M164.26 261C164.62 173.28 241.34 70.82 328.51 51 330.27 140.38 249.31 239.52 164.26 261Z"/><path class="h" d="M164.26 261C103.79 212.15 70.43 99.72 97.44 26 159.2 74.48 189.98 187.65 164.26 261Z"/><path class="h" d="M164.26 261C138.54 187.65 169.32 74.48 231.07 26 258.09 99.72 224.72 212.15 164.26 261Z"/><line class="t" x1="164.26" y1="66" x2="164.26" y2="246"/><circle class="t" cx="164.26" cy="26" r="23.5"/></g></svg>';
+  var LOGO_S = "<svg class=\"logo-top\" viewBox=\"40 0 1000 330\" role=\"img\" aria-label=\"Selvara Est\u00e9tica Integral\"><defs><linearGradient id=\"selvaraGradTop\" gradientUnits=\"userSpaceOnUse\" x1=\"30\" y1=\"10\" x2=\"288\" y2=\"349\"><stop offset=\"0.0\" stop-color=\"#28402F\"></stop><stop offset=\"0.46\" stop-color=\"#4A5A3E\"></stop><stop offset=\"1.0\" stop-color=\"#A3BC8C\"></stop></linearGradient></defs><g transform=\"translate(86.000 30.320) scale(0.740000)\" fill=\"none\" stroke=\"url(#selvaraGradTop)\" stroke-width=\"10.81081081081081\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M82.00 358.00C-1.36 270.16 -25.03 113.94 22.00 4.00C87.44 94.88 116.56 250.17 82.00 358.00Z\"></path><path d=\"M82.00 358.00C58.40 252.49 109.50 118.66 193.00 52.00C202.75 152.49 156.17 287.95 82.00 358.00Z\"></path><path d=\"M82.00 358.00C105.82 271.78 195.60 196.77 283.00 184.00C250.78 260.52 163.68 338.62 82.00 358.00Z\"></path></g><line x1=\"349.12\" y1=\"86\" x2=\"349.12\" y2=\"234\" stroke=\"#D8A99A\" stroke-width=\"1.4\"></line><text x=\"395.12\" y=\"178\" font-family=\"Cormorant Garamond\" font-size=\"84\" font-weight=\"400\" class=\"lt1\" fill=\"#2F4A3C\" text-anchor=\"start\" letter-spacing=\"11\">SELVARA</text><text x=\"397.12\" y=\"224\" font-family=\"Cormorant Garamond\" font-size=\"25\" font-weight=\"400\" class=\"lt2\" fill=\"#C08A7C\" text-anchor=\"start\" letter-spacing=\"7.6\">EST\u00c9TICA INTEGRAL</text></svg>";
+  var LOGO_A = document.getElementById('logoTpl').innerHTML;
+
+  if (/print/.test(location.search)) document.documentElement.classList.add('modo-print');
+  var PDF = /pdf/.test(location.search);
+  if (PDF) { document.documentElement.classList.add('modo-pdf', 'modo-print'); reduce = true; }
+  function fit() {
+    if (PDF) return;
+    var w = window.innerWidth - 32, h = window.innerHeight - 20;
+    var s = Math.min(w / 1600, h / 900);
+    stage.style.transformOrigin = '0 0';
+    stage.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+  }
+  window.addEventListener('resize', fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
+  fit();
+
+  S.forEach(function (sl, i) {
+    var esA = sl.classList.contains('aisle');
+    var top = document.createElement('header'); top.className = 'top';
+    var marca = document.createElement('span');
+    if (esA) marca.innerHTML = LOGO_A; else { marca.className = 'marca-s'; marca.innerHTML = LOGO_S; }
+    var bl = document.createElement('span'); bl.className = 'bloque';
+    var b = sl.getAttribute('data-b');
+    bl.textContent = b === 'Cierre' ? 'Aisle Agency' : 'Bloque ' + b + (sl.getAttribute('data-t') ? ' · ' + sl.getAttribute('data-t') : '');
+    top.appendChild(marca); top.appendChild(bl);
+    var pie = document.createElement('footer'); pie.className = 'pie';
+    var l = document.createElement('span'); l.textContent = esA ? 'Entrega final · ISEC 2026' : 'Habla: ' + sl.getAttribute('data-q');
+    var r = document.createElement('span'); r.className = 'pg'; r.textContent = String(i + 1).padStart(2, '0') + ' / ' + S.length;
+    pie.appendChild(l); pie.appendChild(r);
+    sl.insertBefore(top, sl.firstChild); sl.appendChild(pie);
+  });
+
+  document.querySelectorAll('.w').forEach(function (el) {
+    var j = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (ch) {
+        if (ch.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var o = document.createElement('span'); o.className = 'wo';
+            var n = document.createElement('span'); n.className = 'wi'; n.style.setProperty('--j', j++); n.textContent = part;
+            o.appendChild(n); frag.appendChild(o);
+          });
+          node.replaceChild(frag, ch);
+        } else if (ch.nodeType === 1) walk(ch);
+      });
+    })(el);
+  });
+
+  S.forEach(function (sl) {
+    var k = 0;
+    sl.querySelectorAll('.a, .blk').forEach(function (el) { if (!el.style.getPropertyValue('--i')) el.style.setProperty('--i', k); k++; });
+    sl.querySelectorAll('.kw, .fu, .mes-b').forEach(function (el, j) { el.style.setProperty('--i', j); });
+  });
+
+  function fmt(v, dec) { return v.toLocaleString('es-AR', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+  function contar(sl) {
+    sl.querySelectorAll('[data-n]').forEach(function (el) {
+      var fin = parseFloat(el.getAttribute('data-n')), dec = parseInt(el.getAttribute('data-dec') || '0', 10);
+      if (reduce || fin === 0) { el.textContent = fmt(fin, dec); return; }
+      var t0 = null, dur = 1500, delay = 450;
+      el.textContent = fmt(0, dec);
+      function paso(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min(1, Math.max(0, (ts - t0 - delay) / dur)), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(fin * e, dec);
+        if (p < 1 && sl.classList.contains('on')) requestAnimationFrame(paso); else el.textContent = fmt(fin, dec);
+      }
+      requestAnimationFrame(paso);
+    });
+  }
+
+  // videos con botón (agencia, web y app)
+  document.querySelectorAll('.video-a').forEach(function (va) {
+    var vv = va.querySelector('video');
+    va.querySelector('.play').addEventListener('click', function (e) { e.stopPropagation(); vv.controls = true; va.classList.add('corriendo'); var p = vv.play(); if (p && p.catch) p.catch(function () {}); });
+    vv.addEventListener('ended', function () { va.classList.remove('corriendo'); vv.controls = false; });
+  });
+
+  var prog = document.getElementById('prog'), bloques = [];
+  S.forEach(function (sl, i) { var b = sl.getAttribute('data-b'); if (!bloques.length || bloques[bloques.length - 1].b !== b) bloques.push({ b: b, ini: i, n: 0 }); bloques[bloques.length - 1].n++; });
+  bloques.forEach(function (bl) { var sp = document.createElement('span'); sp.style.setProperty('--n', bl.n); var ii = document.createElement('i'); ii.style.background = S[bl.ini].classList.contains('aisle') ? '#93C165' : '#D8A99A'; sp.appendChild(ii); prog.appendChild(sp); bl.el = ii; });
+
+  var ixIn = document.getElementById('ixIn');
+  bloques.forEach(function (bl) {
+    var h = document.createElement('h3'); h.textContent = bl.b + ' · ' + S[bl.ini].getAttribute('data-q'); ixIn.appendChild(h);
+    for (var i = bl.ini; i < bl.ini + bl.n; i++) {
+      var sl = S[i], btn = document.createElement('button'); btn.type = 'button';
+      var tt = sl.querySelector('.cuerpo h1, .cuerpo h2, .cuerpo .cita');
+      var sp = document.createElement('span'); sp.textContent = String(i + 1).padStart(2, '0'); btn.appendChild(sp);
+      btn.appendChild(document.createTextNode((tt ? tt.textContent : 'Video').replace(/\s+/g, ' ').trim().slice(0, 70)));
+      (function (k) { btn.addEventListener('click', function () { cerrarIx(); ir(k); }); })(i);
+      ixIn.appendChild(btn);
+    }
+  });
+
+  var info = document.getElementById('info'), notas = document.getElementById('notas');
+  function ir(i) {
+    i = Math.max(0, Math.min(S.length - 1, i));
+    if (i === cur) return;
+    var prev = S[cur], sl = S[i];
+    var esA = sl.classList.contains('aisle'), eraA = prev ? prev.classList.contains('aisle') : esA;
+    var cambia = prev && esA !== eraA && !reduce;
+    if (cambia) { barrido.style.background = esA ? '#397553' : '#2F4A3C'; barrido.classList.remove('go'); void barrido.offsetWidth; barrido.classList.add('go'); }
+    if (prev) { prev.classList.remove('on'); prev.querySelectorAll('video').forEach(function (v) { v.pause(); }); }
+    cur = i;
+    setTimeout(function () {
+      if (cur !== i) return;
+      sl.classList.add('on'); contar(sl);
+      if (!document.documentElement.classList.contains('modo-print')) sl.querySelectorAll('video[data-auto]').forEach(function (v) { try { v.currentTime = parseFloat(v.getAttribute('data-start') || '0'); } catch (e) {} var p = v.play(); if (p && p.catch) p.catch(function () {}); });
+    }, cambia ? 380 : 0);
+    info.textContent = (i + 1) + ' / ' + S.length + ' · Bloque ' + sl.getAttribute('data-b') + ' · Habla: ' + sl.getAttribute('data-q');
+    document.getElementById('notasT').textContent = 'Bloque ' + sl.getAttribute('data-b') + ' · ' + sl.getAttribute('data-q') + (sl.getAttribute('data-t') ? ' · ' + sl.getAttribute('data-t') : '');
+    document.getElementById('notasX').textContent = sl.getAttribute('data-notes') || '';
+    bloques.forEach(function (bl) { var p = i >= bl.ini + bl.n ? 100 : i < bl.ini ? 0 : (i - bl.ini + 1) / bl.n * 100; bl.el.style.setProperty('--p', p + '%'); });
+    try { history.replaceState(null, '', '#s' + (i + 1)); } catch (e) {}
+  }
+  function sig() { ir(cur + 1); } function ant() { ir(cur - 1); }
+
+  var reloj = document.getElementById('reloj'), corre = false, base = 0, ini = 0, tick = null;
+  function pinta() { var s = Math.floor((base + (corre ? Date.now() - ini : 0)) / 1000); reloj.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); reloj.classList.toggle('alerta', s >= 900); }
+  function crono() { if (corre) { base += Date.now() - ini; corre = false; clearInterval(tick); } else { ini = Date.now(); corre = true; tick = setInterval(pinta, 500); } pinta(); mostrarUI(); }
+
+  var ix = document.getElementById('ix');
+  function abrirIx() { ix.hidden = false; ix.querySelectorAll('.in button').forEach(function (b, k) { b.classList.toggle('actual', k === cur); }); var a = ix.querySelector('.actual'); if (a) a.focus(); }
+  function cerrarIx() { ix.hidden = true; }
+  function pantalla() { try { if (!document.fullscreenElement) { var p = document.documentElement.requestFullscreen(); if (p && p.catch) p.catch(function () {}); } else document.exitFullscreen(); } catch (e) {} }
+
+  document.getElementById('bPrev').onclick = ant; document.getElementById('bNext').onclick = sig;
+  document.getElementById('bT').onclick = crono; document.getElementById('bN').onclick = function () { notas.hidden = !notas.hidden; };
+  document.getElementById('bO').onclick = abrirIx; document.getElementById('ixCerrar').onclick = cerrarIx; document.getElementById('bF').onclick = pantalla;
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (!ix.hidden) { if (k === 'Escape' || k === 'o' || k === 'O') { cerrarIx(); e.preventDefault(); } return; }
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') { sig(); e.preventDefault(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { ant(); e.preventDefault(); }
+    else if (k === 'Home') ir(0); else if (k === 'End') ir(S.length - 1);
+    else if (k === 'n' || k === 'N') notas.hidden = !notas.hidden;
+    else if (k === 'o' || k === 'O' || k === 'Enter') { abrirIx(); e.preventDefault(); }
+    else if (k === 't' || k === 'T') crono();
+    else if (k === 'f' || k === 'F') pantalla();
+    else if (k === 'Escape') notas.hidden = true;
+  });
+  stage.addEventListener('click', function (e) { if (e.target.closest('video, a, button, .video-a')) return; var r = stage.getBoundingClientRect(); if (e.clientX < r.left + r.width * .3) ant(); else sig(); });
+  var tx = null;
+  document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) { if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) { if (dx < 0) sig(); else ant(); } tx = null; });
+
+  var ui = document.getElementById('ui'), hideT = null;
+  function mostrarUI() { ui.classList.add('ver'); clearTimeout(hideT); hideT = setTimeout(function () { ui.classList.remove('ver'); }, 2600); }
+  document.addEventListener('mousemove', mostrarUI); mostrarUI();
+
+  if (PDF) { S.forEach(function (sl) { sl.classList.add('on'); contar(sl); }); return; }
+  var m = /^#s(\d+)$/.exec(location.hash);
+  ir(m ? parseInt(m[1], 10) - 1 : 0);
+  window.addEventListener('hashchange', function () { var mm = /^#s(\d+)$/.exec(location.hash); if (mm) ir(parseInt(mm[1], 10) - 1); });
+})();
+</script>
+
